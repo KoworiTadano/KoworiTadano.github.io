@@ -1,0 +1,148 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const games = [
+  {
+    title: "FF14",
+    url: "https://jp.finalfantasyxiv.com/lodestone/character/2966570/",
+    status: "休止",
+    memo: "7.0までクリア。",
+  },
+  {
+    title: "Diablo4",
+    url: "",
+    status: "休止",
+    memo: "リリスまで。やっぱりネクロが好き。",
+  },
+  {
+    title: "Fallout76",
+    url: "",
+    status: "休止",
+    memo: "弾持ちがとても良い「血濡れガトリング」を愛用していました。",
+  },
+  {
+    title: "DQ10",
+    url: "https://hiroba.dqx.jp/sc/character/111553280695",
+    status: "休止",
+    memo: "占い師120までやりました。",
+  },
+  {
+    title: "PSO2NGS",
+    url: "",
+    status: "休止",
+    memo: "PSO2ではサモナーで走破。NGSではウェイカーが好みでLv115まで上げてみました。",
+  },
+  {
+    title: "FGO",
+    url: "",
+    status: "休止",
+    memo: "ちまちまと。1.5アガルタまでクリアしました。",
+  },
+];
+---
+
+<Layout title="games" description="プレイ済み・プレイ中のゲーム">
+  <h1>GAMES</h1>
+  <p class="sub">// Juegos que estoy jugando o he jugado</p>
+
+  <ul class="game-list">
+    {games.map(game => (
+      <li class="game-item">
+        <div class="game-header">
+          <span class="bullet">▶</span>
+          {game.url
+            ? <a href={game.url} target="_blank" rel="noopener" class="game-title">{game.title}</a>
+            : <span class="game-title">{game.title}</span>
+          }
+          <span class:list={["status", game.status === "プレイ中" ? "active" : "inactive"]}>
+            {game.status === "プレイ中" ? "● PLAYING" : "○ PAUSED"}
+          </span>
+        </div>
+        <p class="memo">// {game.memo}</p>
+      </li>
+    ))}
+  </ul>
+</Layout>
+
+<style>
+  .sub {
+    font-size: var(--font-sm);
+    color: var(--color-muted);
+    margin-top: -0.5rem;
+  }
+
+  .game-list {
+    list-style: none;
+    margin-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 2px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .game-item {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    margin: 0;
+  }
+
+  .game-item:last-child {
+    border-bottom: none;
+  }
+
+  .game-item:hover {
+    background: #1a1a3a;
+  }
+
+  .game-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-1);
+  }
+
+  .bullet {
+    color: var(--color-muted);
+    font-size: 0.6rem;
+    flex-shrink: 0;
+  }
+
+  .game-title {
+    font-family: var(--font-pixel);
+    font-size: 0.7rem;
+    color: var(--color-text);
+    letter-spacing: 0.05em;
+  }
+
+  a.game-title:hover {
+    color: var(--color-primary);
+  }
+
+  .status {
+    font-family: var(--font-pixel);
+    font-size: 0.5rem;
+    margin-left: auto;
+    padding: 2px 6px;
+    flex-shrink: 0;
+  }
+
+  .status.active {
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    text-shadow: 0 0 6px var(--color-primary);
+  }
+
+  .status.inactive {
+    color: var(--color-muted);
+    border: 1px solid var(--color-border);
+  }
+
+  .memo {
+    font-size: var(--font-sm);
+    color: var(--color-muted);
+    margin: 0;
+    padding-left: calc(var(--space-2) + 0.6rem);
+    max-width: none;
+  }
+</style>

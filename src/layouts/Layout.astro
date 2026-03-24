@@ -1,0 +1,149 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "kowori.net — lazy play" } = Astro.props;
+
+const navLinks = [
+  { text: "TOP", href: "/" },
+  { text: "GAMES", href: "/games" },
+  { text: "MACHINES", href: "/machines" },
+  { text: "REVIEWS", href: "/reviews" },
+  { text: "NOTES", href: "/notes" },
+  { text: "LINKZ", href: "/linkz" },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/png" href="/robot_a.png" />
+    <title>{title.toUpperCase()} | KOWORI.NET</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  </head>
+  <body>
+    <header>
+      <div class="header-inner">
+        <a href="/" class="site-title">
+          <span class="blink">▶</span> KOWORI.NET
+        </a>
+        <nav>
+          {navLinks.map(link => (
+            <a
+              href={link.href}
+              class:list={["nav-link", { active: currentPath === link.href || (link.href !== "/" && currentPath.startsWith(link.href)) }]}
+            >
+              {link.text}
+            </a>
+          ))}
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="content">
+        <slot />
+      </div>
+    </main>
+
+    <footer>
+      <div class="content">
+        <span class="muted">© {new Date().getFullYear()} kowori tadano</span>
+        <span class="muted"> // </span>
+        <span class="muted">built with astro</span>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  @import "../styles/global.css";
+</style>
+
+<style>
+  header {
+    border-bottom: 2px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .header-inner {
+    max-width: var(--size-content);
+    margin: 0 auto;
+    padding: var(--space-3) var(--size-gutter);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .site-title {
+    font-family: var(--font-pixel);
+    font-size: 0.75rem;
+    color: var(--color-primary);
+    text-shadow: 0 0 10px var(--color-primary);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+
+  .site-title:hover {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  .blink {
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  nav {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  .nav-link {
+    font-family: var(--font-pixel);
+    font-size: 0.65rem;
+    color: var(--color-muted);
+    letter-spacing: 0.05em;
+    padding: var(--space-1) var(--space-2);
+    border: 1px solid transparent;
+    text-decoration: none;
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+    text-decoration: none;
+    text-shadow: 0 0 8px var(--color-primary);
+  }
+
+  .content {
+    max-width: var(--size-content);
+    margin: 0 auto;
+    padding: var(--space-5) var(--size-gutter);
+  }
+
+  footer {
+    margin-top: var(--space-6);
+    border-top: 2px dashed var(--color-border);
+    font-size: var(--font-sx);
+    font-family: var(--font-pixel);
+  }
+
+  .muted { color: var(--color-muted); }
+</style>

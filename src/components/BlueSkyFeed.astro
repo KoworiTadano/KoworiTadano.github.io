@@ -1,0 +1,125 @@
+---
+const HANDLE = "tadakori.bsky.social";
+const LIMIT = 3;
+
+type Post = {
+  post: {
+    uri: string;
+    record: { text: string; createdAt: string };
+    likeCount: number;
+  };
+};
+
+let posts: Post[] = [];
+let error = false;
+
+try {
+  const res = await fetch(
+    `https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${HANDLE}&limit=${LIMIT}`
+  );
+  if (res.ok) {
+    const data = await res.json();
+    posts = (data.feed as Post[]).filter(
+      (item) => !item.post.record.text.startsWith("RT ")
+    ).slice(0, LIMIT);
+  } else {
+    error = true;
+  }
+} catch {
+  error = true;
+}
+
+const formatDate = (iso: string) =>
+  new Date(iso).toLocaleDateString("ja-JP", {
+    year: "numeric", month: "2-digit", day: "2-digit",
+  });
+
+const postUrl = (uri: string) => {
+  const parts = uri.replace("at://", "").split("/");
+  return `https://bsky.app/profile/${parts[0]}/post/${parts[2]}`;
+};
+---
+
+<div class="feed-section">
+  <h3 class="feed-label">🦋 BLUESKY</h3>
+  {error ? (
+    <p class="feed-error">// 取得できませんでした</p>
+  ) : posts.length === 0 ? (
+    <p class="feed-error">// 投稿がありません</p>
+  ) : (
+    <ul class="feed-list">
+      {posts.map((item) => (
+        <li>
+          <a href={postUrl(item.post.uri)} target="_blank" rel="noopener" class="feed-link">
+            <span class="feed-text">{item.post.record.text}</span>
+            <span class="feed-meta">{formatDate(item.post.record.createdAt)}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
+</div>
+
+<style>
+  .feed-section {
+    margin-bottom: var(--space-3);
+  }
+
+  .feed-label {
+    font-family: var(--font-pixel);
+    font-size: 0.55rem;
+    color: var(--color-muted);
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-2);
+  }
+
+  .feed-list {
+    list-style: none;
+    margin: 0;
+    border: 2px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .feed-list li {
+    margin: 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .feed-list li:last-child {
+    border-bottom: none;
+  }
+
+  .feed-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    text-decoration: none;
+  }
+
+  .feed-link:hover {
+    background: #1a1a3a;
+    text-decoration: none;
+  }
+
+  .feed-text {
+    font-size: var(--font-sm);
+    color: var(--color-text);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  .feed-meta {
+    font-size: var(--font-sx);
+    color: var(--color-muted);
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  .feed-error {
+    font-size: var(--font-sm);
+    color: var(--color-muted);
+  }
+</style>

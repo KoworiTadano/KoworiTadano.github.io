@@ -1,0 +1,149 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const available = [
+  {
+    maker: "Nintendo",
+    machines: [
+      "Switch 2",
+      "Switch Lite",
+      "Wii",
+      "Wii U",
+      "N64",
+      "GameCube（GBAアダプタあり）",
+      "3DS LL",
+    ],
+  },
+  {
+    maker: "Microsoft",
+    machines: ["XBOX Series X"],
+  },
+  {
+    maker: "SONY",
+    machines: [
+      "PlayStation 3（初期型 / PS1・PS2動作可）",
+      "PlayStation 4（PSVRあり）",
+      "PlayStation 5",
+    ],
+  },
+  {
+    maker: "SEGA",
+    machines: ["DreamCast"],
+  },
+  {
+    maker: "Other",
+    machines: ["Retrofreak"],
+  },
+];
+
+const unavailable = [
+  "COLOR TV-GAME 15",
+  "FC / DISC SYSTEM / SFC / GB / GBA / DS",
+  "PCE / PCE-SG",
+  "SATURN",
+  "PS1 / PS2 / PSP",
+];
+---
+
+<Layout title="machines" description="所持・稼働可能なゲーム機">
+  <h1>MACHINES</h1>
+
+  <h2>// AVAILABLE</h2>
+  <div class="maker-grid">
+    {available.map(group => (
+      <div class="maker-box">
+        <div class="maker-label">{group.maker}</div>
+        <ul>
+          {group.machines.map(m => (
+            <li><span class="item-bullet">-</span> {m}</li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+
+  <hr />
+
+  <div class="section-header">
+    <h2>// LOST</h2>
+    <span class="lost-badge">LOST</span>
+  </div>
+  <ul class="unavailable">
+    {unavailable.map(m => (
+      <li><span class="item-bullet">-</span> {m}</li>
+    ))}
+  </ul>
+</Layout>
+
+<style>
+  .maker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+  }
+
+  .maker-box {
+    border: 2px solid var(--color-border);
+    background: var(--color-surface);
+    padding: var(--space-3);
+  }
+
+  .maker-label {
+    font-family: var(--font-pixel);
+    font-size: 0.5rem;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-2);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px dashed var(--color-border);
+  }
+
+  .maker-box ul {
+    list-style: none;
+    margin: 0;
+    font-size: var(--font-sm);
+  }
+
+  .maker-box li {
+    margin-bottom: var(--space-1);
+    color: var(--color-text);
+  }
+
+  .item-bullet {
+    color: var(--color-muted);
+    margin-right: 4px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .lost-badge {
+    font-family: var(--font-pixel);
+    font-size: 0.5rem;
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent);
+    padding: 2px 8px;
+    letter-spacing: 0.1em;
+    animation: flicker 3s infinite;
+  }
+
+  @keyframes flicker {
+    0%, 95%, 100% { opacity: 1; }
+    96% { opacity: 0.3; }
+    98% { opacity: 0.7; }
+  }
+
+  .unavailable {
+    list-style: none;
+    margin-left: 0;
+    font-size: var(--font-sm);
+    color: var(--color-muted);
+    text-decoration-color: var(--color-muted);
+  }
+
+  .unavailable li { margin-bottom: var(--space-1); }
+</style>

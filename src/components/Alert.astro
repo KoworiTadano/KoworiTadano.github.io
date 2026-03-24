@@ -1,0 +1,85 @@
+---
+import alert from "../config/alert.json";
+
+const levelLabel = ["", "LEVEL 1", "LEVEL 2", "LEVEL 3"][alert.level] ?? "LEVEL ?";
+const levelColor = ["", "#ffe566", "#ff9500", "#ff2d78"][alert.level] ?? "#ffe566";
+---
+
+{alert.enabled && (
+  <div class="alert-box" style={`--alert-color: ${levelColor}`}>
+    <div class="alert-header">
+      <span class="alert-icon blink">⚠</span>
+      <span class="alert-title">WARNING</span>
+      <span class="alert-level">{levelLabel}</span>
+    </div>
+    <div class="alert-body">
+      <span class="alert-reason">{alert.reason}</span>
+      {alert.detail && <span class="alert-detail">// {alert.detail}</span>}
+    </div>
+  </div>
+)}
+
+<style>
+  .alert-box {
+    border: 2px solid var(--alert-color);
+    box-shadow: 4px 4px 0px var(--alert-color);
+    background: var(--color-surface);
+    padding: var(--space-3) var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+
+  .alert-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-2);
+  }
+
+  .alert-icon {
+    color: var(--alert-color);
+    font-size: 1rem;
+  }
+
+  .alert-title {
+    font-family: var(--font-pixel);
+    font-size: 0.65rem;
+    color: var(--alert-color);
+    text-shadow: 0 0 8px var(--alert-color);
+    letter-spacing: 0.1em;
+  }
+
+  .alert-level {
+    font-family: var(--font-pixel);
+    font-size: 0.45rem;
+    color: var(--color-surface);
+    background: var(--alert-color);
+    padding: 2px 6px;
+    letter-spacing: 0.05em;
+  }
+
+  .alert-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding-left: calc(1rem + var(--space-2));
+  }
+
+  .alert-reason {
+    font-size: var(--font-md);
+    color: var(--color-text);
+  }
+
+  .alert-detail {
+    font-size: var(--font-sm);
+    color: var(--color-muted);
+  }
+
+  .blink {
+    animation: blink 1.2s step-end infinite;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+</style>

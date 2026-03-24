@@ -1,0 +1,146 @@
+---
+// チャンネルIDの UC を UU に変えたものがアップロード済みプレイリストID
+const CHANNEL_ID = "UC2-6vCCrGTqCDE6tTQ9TtKw";
+const PLAYLIST_ID = "UU" + CHANNEL_ID.slice(2);
+const API_KEY = import.meta.env.YOUTUBE_API_KEY;
+const LIMIT = 3;
+
+type VideoItem = {
+  snippet: {
+    title: string;
+    publishedAt: string;
+    resourceId: { videoId: string };
+    thumbnails: { medium: { url: string } };
+  };
+};
+
+let videos: VideoItem[] = [];
+let error = false;
+
+if (!API_KEY) {
+  error = true;
+} else {
+  try {
+    const res = await fetch(
+      `https://www.googleapis.com/youtube/v3/playlistItems?playlistId=${PLAYLIST_ID}&maxResults=${LIMIT}&part=snippet&key=${API_KEY}`
+    );
+    if (res.ok) {
+      const data = await res.json();
+      videos = data.items as VideoItem[];
+    } else {
+      error = true;
+    }
+  } catch {
+    error = true;
+  }
+}
+
+const formatDate = (iso: string) =>
+  new Date(iso).toLocaleDateString("ja-JP", {
+    year: "numeric", month: "2-digit", day: "2-digit",
+  });
+---
+
+<div class="feed-section">
+  <h3 class="feed-label">▶ YOUTUBE</h3>
+  {error ? (
+    <p class="feed-error">// APIキー未設定または取得できませんでした</p>
+  ) : videos.length === 0 ? (
+    <p class="feed-error">// 動画がありません</p>
+  ) : (
+    <ul class="feed-list">
+      {videos.map((item) => (
+        <li>
+          <a
+            href={`https://www.youtube.com/watch?v=${item.snippet.resourceId.videoId}`}
+            target="_blank"
+            rel="noopener"
+            class="feed-link"
+          >
+            <img
+              src={item.snippet.thumbnails.medium.url}
+              alt=""
+              class="thumb"
+              width="120"
+              height="67"
+            />
+            <span class="video-info">
+              <span class="video-title">{item.snippet.title}</span>
+              <span class="feed-meta">{formatDate(item.snippet.publishedAt)}</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
+</div>
+
+<style>
+  .feed-section {
+    margin-bottom: var(--space-3);
+  }
+
+  .feed-label {
+    font-family: var(--font-pixel);
+    font-size: 0.55rem;
+    color: var(--color-muted);
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-2);
+  }
+
+  .feed-list {
+    list-style: none;
+    margin: 0;
+    border: 2px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .feed-list li {
+    margin: 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .feed-list li:last-child {
+    border-bottom: none;
+  }
+
+  .feed-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    text-decoration: none;
+  }
+
+  .feed-link:hover {
+    background: #1a1a3a;
+    text-decoration: none;
+  }
+
+  .thumb {
+    flex-shrink: 0;
+    border: 1px solid var(--color-border);
+  }
+
+  .video-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .video-title {
+    font-size: var(--font-sm);
+    color: var(--color-text);
+    line-height: 1.5;
+  }
+
+  .feed-meta {
+    font-size: var(--font-sx);
+    color: var(--color-muted);
+  }
+
+  .feed-error {
+    font-size: var(--font-sm);
+    color: var(--color-muted);
+  }
+</style>

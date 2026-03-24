@@ -1,0 +1,88 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const linkz = [
+  {
+    category: "",
+    links: [
+      {
+        title: "いつだってそう。どこにもつながっていないんだ",
+        url: "",
+        desc: "",
+      },
+    ],
+  },
+];
+---
+
+<Layout title="linkz" description="LINKZ">
+  <h1>LINKZ</h1>
+  <p class="sub">// LINKZ</p>
+
+  <div class="link-sections">
+    {linkz.map(section => (
+      <div class="section">
+        <h2>// {section.category}</h2>
+        <ul class="link-list">
+          {section.links.map(link => (
+            <li>
+              <a href={link.url} target="_blank" rel="noopener" class="link-title">
+                {link.title} ↗
+              </a>
+              {link.desc && <p class="link-desc">// {link.desc}</p>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</Layout>
+
+<style>
+  .sub {
+    font-size: var(--font-sm);
+    color: var(--color-muted);
+    margin-top: -0.5rem;
+  }
+
+  .link-sections {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .link-list {
+    list-style: none;
+    margin: 0;
+    border: 2px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .link-list li {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    margin: 0;
+  }
+
+  .link-list li:last-child {
+    border-bottom: none;
+  }
+
+  .link-list li:hover {
+    background: #1a1a3a;
+  }
+
+  .link-title {
+    font-family: var(--font-pixel);
+    font-size: 0.6rem;
+    letter-spacing: 0.03em;
+    line-height: 1.8;
+  }
+
+  .link-desc {
+    font-size: var(--font-sm);
+    color: var(--color-muted);
+    margin: var(--space-1) 0 0;
+    max-width: none;
+  }
+</style>

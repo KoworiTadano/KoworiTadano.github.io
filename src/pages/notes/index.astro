@@ -1,0 +1,106 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const notes = (await getCollection("notes")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString("ja-JP", { year: "numeric", month: "2-digit", day: "2-digit" });
+---
+
+<Layout title="notes" description="メモ">
+  <h1>NOTES</h1>
+
+  {notes.length === 0 ? (
+    <p class="empty">&gt; no entries found_</p>
+  ) : (
+    <ul class="note-list">
+      {notes.map(note => (
+        <li>
+          <a href={`/notes/${note.slug}`} class="note-link">
+            <span class="note-title">{note.data.title}</span>
+            <span class="note-meta">
+              <time datetime={note.data.date.toISOString()}>{formatDate(note.data.date)}</time>
+              {note.data.tags.map(tag => <span class="tag">{tag}</span>)}
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
+</Layout>
+
+<style>
+  .note-list {
+    list-style: none;
+    margin-left: 0;
+    border: 2px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .note-list li {
+    margin: 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .note-list li:last-child {
+    border-bottom: none;
+  }
+
+  .note-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    text-decoration: none;
+    flex-wrap: wrap;
+  }
+
+  .note-link:hover {
+    background: #1a1a3a;
+    text-decoration: none;
+  }
+
+  .note-link:hover .note-title {
+    color: var(--color-primary);
+    text-shadow: 0 0 8px var(--color-primary);
+  }
+
+  .note-title {
+    font-family: var(--font-pixel);
+    font-size: 0.7rem;
+    color: var(--color-text);
+    letter-spacing: 0.03em;
+    line-height: 1.6;
+  }
+
+  .note-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-shrink: 0;
+  }
+
+  time {
+    font-size: var(--font-sx);
+    color: var(--color-muted);
+  }
+
+  .tag {
+    color: var(--color-tag);
+    border: 1px solid var(--color-tag);
+    padding: 2px 8px;
+    font-family: var(--font-pixel);
+    font-size: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  .empty {
+    font-family: var(--font-pixel);
+    font-size: 0.6rem;
+    color: var(--color-muted);
+  }
+</style>

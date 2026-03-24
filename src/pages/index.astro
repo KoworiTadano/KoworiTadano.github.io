@@ -1,0 +1,212 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Alert from "../components/Alert.astro";
+import BlueSkyFeed from "../components/BlueSkyFeed.astro";
+import YouTubeFeed from "../components/YouTubeFeed.astro";
+
+const twitter = { text: "Twitter", url: "https://twitter.com/kowori_fallout", handle: "@kowori_fallout", color: "#1d9bf0", icon: "𝕏" };
+const bluesky  = { text: "BlueSky", url: "https://bsky.app/profile/tadakori.bsky.social", handle: "@tadakori.bsky.social", color: "#0085ff", icon: "🦋" };
+const youtube  = { text: "YouTube", url: "https://www.youtube.com/channel/UC2-6vCCrGTqCDE6tTQ9TtKw", handle: "ただこりさんち", color: "#ff0000", icon: "▶" };
+---
+
+<Layout title="top">
+  <div class="screen">
+    <div class="avatar-wrap">
+      <img src="/robot_a.png" alt="" width="64" height="64" class="avatar" />
+    </div>
+    <p class="handle">&gt; callme tadakori-san.</p>
+    <p class="tagline">// lazy play</p>
+  </div>
+
+  <hr />
+
+  <Alert />
+
+  <nav class="page-nav">
+    <a href="/games" class="nav-card">
+      <span class="label">[ GAMES ]</span>
+      <span class="desc">ネトゲプレイ履歴</span>
+    </a>
+    <a href="/machines" class="nav-card">
+      <span class="label">[ MACHINES ]</span>
+      <span class="desc">所持ゲーム機</span>
+    </a>
+    <a href="/reviews" class="nav-card">
+      <span class="label">[ REVIEWS ]</span>
+      <span class="desc">ただこりさんによる独断と偏見</span>
+    </a>
+    <a href="/notes" class="nav-card">
+      <span class="label">[ NOTES ]</span>
+      <span class="desc">メモ</span>
+    </a>
+    <a href="/linkz" class="nav-card">
+      <span class="label">[ LINKZ ]</span>
+      <span class="desc"></span>
+    </a>
+  </nav>
+
+  <hr />
+
+  <div class="social-section">
+    <a href={twitter.url} target="_blank" rel="noopener" class="social-card" style={`--card-color: ${twitter.color}`}>
+      <span class="social-icon">{twitter.icon}</span>
+      <span class="social-info">
+        <span class="social-name">{twitter.text}</span>
+        <span class="social-handle">{twitter.handle}</span>
+      </span>
+      <span class="social-arrow">→</span>
+    </a>
+
+    <a href={bluesky.url} target="_blank" rel="noopener" class="social-card" style={`--card-color: ${bluesky.color}`}>
+      <span class="social-icon">{bluesky.icon}</span>
+      <span class="social-info">
+        <span class="social-name">{bluesky.text}</span>
+        <span class="social-handle">{bluesky.handle}</span>
+      </span>
+      <span class="social-arrow">→</span>
+    </a>
+    <BlueSkyFeed />
+
+    <a href={youtube.url} target="_blank" rel="noopener" class="social-card" style={`--card-color: ${youtube.color}`}>
+      <span class="social-icon">{youtube.icon}</span>
+      <span class="social-info">
+        <span class="social-name">{youtube.text}</span>
+        <span class="social-handle">{youtube.handle}</span>
+      </span>
+      <span class="social-arrow">→</span>
+    </a>
+    <YouTubeFeed />
+  </div>
+</Layout>
+
+<style>
+  .screen {
+    background: var(--color-surface);
+    border: var(--pixel-border);
+    box-shadow: var(--pixel-shadow);
+    padding: var(--space-5);
+    margin-bottom: var(--space-5);
+  }
+
+  .avatar-wrap {
+    margin-bottom: var(--space-3);
+  }
+
+  .avatar {
+    image-rendering: pixelated;
+  }
+
+  .handle {
+    font-family: var(--font-pixel);
+    font-size: 0.75rem;
+    color: var(--color-primary);
+    text-shadow: 0 0 8px var(--color-primary);
+    margin-bottom: var(--space-2);
+    max-width: none;
+  }
+
+  .tagline {
+    font-size: var(--font-sm);
+    color: var(--color-muted);
+    margin: 0;
+    max-width: none;
+  }
+
+  .page-nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+  }
+
+  .nav-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-3) var(--space-4);
+    border: 2px solid var(--color-border);
+    background: var(--color-surface);
+    text-decoration: none;
+    transition: border-color 0.1s, box-shadow 0.1s;
+  }
+
+  .nav-card:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--pixel-shadow);
+    text-decoration: none;
+  }
+
+  .nav-card .label {
+    font-family: var(--font-pixel);
+    font-size: 0.6rem;
+    color: var(--color-primary);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-card .desc {
+    font-size: var(--font-sm);
+    color: var(--color-muted);
+  }
+
+  /* ソーシャルリンク */
+  .social-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .social-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-surface);
+    border: 2px solid var(--color-border);
+    border-left: 4px solid var(--card-color);
+    text-decoration: none;
+    transition: border-color 0.1s, background 0.1s;
+  }
+
+  .social-card:hover {
+    background: #1a1a3a;
+    border-color: var(--card-color);
+    text-decoration: none;
+  }
+
+  .social-icon {
+    font-size: 1.2rem;
+    width: 2rem;
+    text-align: center;
+    flex-shrink: 0;
+    filter: grayscale(0.3);
+  }
+
+  .social-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+  }
+
+  .social-name {
+    font-family: var(--font-pixel);
+    font-size: 0.6rem;
+    color: var(--color-text);
+    letter-spacing: 0.05em;
+  }
+
+  .social-handle {
+    font-size: var(--font-sm);
+    color: var(--color-muted);
+  }
+
+  .social-arrow {
+    color: var(--color-muted);
+    font-size: var(--font-sm);
+    flex-shrink: 0;
+  }
+
+  .social-card:hover .social-arrow {
+    color: var(--color-primary);
+  }
+</style>
