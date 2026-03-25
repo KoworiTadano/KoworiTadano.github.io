@@ -1,0 +1,322 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const reviews = await getCollection("reviews");
+// title（小文字・空白除去）→ slug のMap
+const reviewMap = new Map(
+  reviews.map(r => [r.data.title.toLowerCase().replace(/\s/g, ""), r.slug])
+);
+
+const reviewSlug = (gameTitle: string) =>
+  reviewMap.get(gameTitle.toLowerCase().replace(/\s/g, "")) ?? null;
+
+const library = [
+  {
+    platform: "PS4 / PS5",
+    games: [
+      "デモンゲイズ",
+      "PSO2NGS",
+      "ソードアート・オンライン ロストソング",
+      "スカイリム",
+      "ホグワーツレガシー",
+      "NO MAN'S SKY",
+      "Fallout 4",
+      "スーパーロボット大戦V",
+      "DQ10",
+      "PALWORLD",
+      "DQ11",
+      "Rune Factory 4 Special",
+      "Persona 5 the Royal",
+      "OUTER WORLDS",
+      "モナーク",
+      "GTA5",
+      "ソードアート・オンライン Re:ホロウ",
+      "探偵神宮寺三郎 PRISM OF EYES",
+      "ドラゴンエイジ・インクイジション",
+      "METALMAX XENO Reborn",
+      "メタファー",
+      "ドラゴンズ・ドグマ",
+      "KOWLOON'S GATE suzaku VR",
+      "Fallout76",
+      "TALES of ARISE",
+      "DIABLO4",
+      "DIABLO2",
+      "FF14",
+      "FF16",
+      "SOUL HACKERS2",
+      "HORIZON ZERO DAWN",
+      "biohazard HD remaster",
+      "Metal Gear Solid V: Ground Zeroes",
+    ],
+  },
+  {
+    platform: "PS3 / GameArchives",
+    games: [
+      "wizardry 囚われし魂の迷宮",
+      "Dragon's Crown",
+      "Diablo3",
+      "Tetris",
+      "二ノ国 白き聖灰の女王",
+      "ジョジョの奇妙な冒険 未来への遺産 HD",
+      "DAYTONA USA",
+      "真・女神転生 if...",
+      "ワイルドアームズ2nd イグニッション",
+      "FF5",
+      "シルバー事件",
+      "学校であった怖い話S",
+    ],
+  },
+  {
+    platform: "PS/PS2",
+    games: [
+      "KOWLOON'S GATE",
+    ],
+  },
+  {
+    platform: "Switch 2",
+    games: [
+      "マリオカート",
+    ],
+  },
+  {
+    platform: "Switch",
+    games: [
+      "真・女神転生V",
+      "どうぶつの森",
+      "ゼノブレイド2",
+      "ゼノブレイド3",
+      "ゼノブレイドクロス",
+    ],
+  },
+  {
+    platform: "XBOX",
+    games: [
+      "Fallout 3",
+      "Fallout: New Vegas",
+    ],
+  },
+  { platform: "Steam", games: [] },
+  { platform: "FC", games: [] },
+  { platform: "SFC", games: [] },
+  { platform: "MD", games: [] },
+  { platform: "PCE", games: [] },
+  { platform: "GB / GBA", games: [] },
+  { platform: "DS / 3DS", games: [] },
+  { platform: "MSX / MSX2", games: [] },
+  { platform: "Windows", games: ["偽典・女神転生"] },
+  { platform: "PC-9801/9821", games: ["幻影都市","偽典・女神転生"] },
+];
+
+const total = library.reduce((sum, p) => sum + p.games.length, 0);
+---
+
+<Layout title="library" description="所持ゲーム一覧">
+  <h1>LIBRARY</h1>
+  <div class="header-row">
+    <p class="sub">// {total} titles in collection</p>
+    <div class="sort-controls">
+      <button class="sort-btn" data-sort="asc" data-active="true">ASC</button>
+      <button class="sort-btn" data-sort="desc">DESC</button>
+    </div>
+  </div>
+
+  <div class="platform-grid">
+    {library.filter(g => g.games.length > 0).map(group => (
+      <div class="platform-box">
+        <div class="platform-label">{group.platform}</div>
+        <div class="count-badge">{group.games.length} titles</div>
+        <ul>
+          {group.games.map(g => {
+            const slug = reviewSlug(g);
+            return (
+              <li>
+                <span class="bullet">-</span>
+                {slug
+                  ? <a href={`/reviews#${slug}`} class="reviewed">{g}</a>
+                  : g
+                }
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    ))}
+  </div>
+
+  {library.some(g => g.games.length === 0) && (
+    <div class="tbd-grid">
+      {library.filter(g => g.games.length === 0).map(group => (
+        <div class="platform-box empty">
+          <div class="platform-label">{group.platform}</div>
+          <div class="tbd">// TBD</div>
+        </div>
+      ))}
+    </div>
+  )}
+</Layout>
+
+<style>
+  .sub {
+    font-size: var(--font-sm);
+    color: var(--color-muted);
+  }
+
+  .platform-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .platform-box {
+    border: 2px solid var(--color-border);
+    background: var(--color-surface);
+    padding: var(--space-3);
+  }
+
+  .tbd-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+  }
+
+  @media (max-width: 600px) {
+    .tbd-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .platform-box.empty {
+    border-style: dashed;
+    opacity: 0.4;
+  }
+
+  .tbd {
+    font-family: var(--font-pixel);
+    font-size: 0.4rem;
+    color: var(--color-muted);
+    letter-spacing: 0.1em;
+  }
+
+  .platform-label {
+    font-family: var(--font-pixel);
+    font-size: 0.5rem;
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-1);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px dashed var(--color-border);
+  }
+
+  .count-badge {
+    font-family: var(--font-pixel);
+    font-size: 0.4rem;
+    color: var(--color-muted);
+    margin-bottom: var(--space-2);
+  }
+
+  .platform-box ul {
+    list-style: none;
+    margin: 0;
+    font-size: var(--font-sm);
+    columns: 3;
+    column-gap: var(--space-5);
+  }
+
+  @media (max-width: 600px) {
+    .platform-box ul { columns: 2; }
+  }
+
+  .platform-box li {
+    margin-bottom: var(--space-1);
+    color: var(--color-text);
+  }
+
+  .bullet {
+    color: var(--color-muted);
+    margin-right: 4px;
+  }
+
+  a.reviewed {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  a.reviewed:hover {
+    text-decoration: underline;
+  }
+
+  .header-row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-3);
+  }
+
+  .sub {
+    margin: 0;
+  }
+
+  .sort-controls {
+    display: flex;
+    gap: var(--space-2);
+    margin-left: auto;
+  }
+
+  .sort-btn {
+    font-family: var(--font-pixel);
+    font-size: 0.45rem;
+    letter-spacing: 0.08em;
+    background: none;
+    border: 1px solid var(--color-border);
+    color: var(--color-muted);
+    padding: 2px 8px;
+    cursor: pointer;
+  }
+
+  .sort-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .sort-btn[data-active="true"] {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    text-shadow: 0 0 6px var(--color-primary);
+  }
+</style>
+
+<script>
+  type SortOrder = "default" | "asc" | "desc";
+
+  // 各ulのli要素を元の順序で記憶
+  const lists = document.querySelectorAll<HTMLUListElement>(".platform-box ul");
+  const originals = new Map<HTMLUListElement, HTMLLIElement[]>();
+  lists.forEach(ul => {
+    originals.set(ul, [...ul.querySelectorAll<HTMLLIElement>("li")]);
+  });
+
+  function applySort(order: SortOrder) {
+    lists.forEach(ul => {
+      const items = order === "default"
+        ? [...(originals.get(ul) ?? [])]
+        : [...ul.querySelectorAll<HTMLLIElement>("li")].sort((a, b) => {
+            const ta = a.textContent?.trim() ?? "";
+            const tb = b.textContent?.trim() ?? "";
+            return order === "asc"
+              ? ta.localeCompare(tb, "ja")
+              : tb.localeCompare(ta, "ja");
+          });
+      items.forEach(li => ul.appendChild(li));
+    });
+  }
+
+  applySort("asc");
+
+  document.querySelectorAll<HTMLButtonElement>(".sort-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".sort-btn").forEach(b => b.removeAttribute("data-active"));
+      btn.dataset.active = "true";
+      applySort(btn.dataset.sort as SortOrder);
+    });
+  });
+</script>

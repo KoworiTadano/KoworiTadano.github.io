@@ -16,13 +16,23 @@ const scoreColor = (score: number) => {
 
 <Layout title="reviews" description="ただこりさんによるゲームレビュー">
   <h1>REVIEWS</h1>
-  <p class="sub">// ただこりさんによる独断と偏見</p>
+  <div class="header-row">
+    <p class="sub">// ただこりさんによる独断と偏見</p>
+    <div class="sort-controls">
+      <span class="sort-label">SORT:</span>
+      <button class="sort-btn" data-sort="date-desc" data-active="true">新しい順</button>
+      <button class="sort-btn" data-sort="date-asc">古い順</button>
+      <button class="sort-btn" data-sort="title-asc">タイトル</button>
+    </div>
+  </div>
 
   <div class="review-list">
     {reviews.map(async review => {
       const { Content } = await review.render();
       return (
-        <div class="review-card">
+        <div class="review-card" id={review.slug}
+          data-title={review.data.title}
+          data-date={review.data.date.valueOf()}>
           <div class="card-header">
             <span class="game-title">{review.data.title}</span>
           </div>
@@ -54,7 +64,51 @@ const scoreColor = (score: number) => {
   .sub {
     font-size: var(--font-sm);
     color: var(--color-muted);
-    margin-top: -0.5rem;
+    margin: 0;
+  }
+
+  .header-row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-4);
+  }
+
+  .sort-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-left: auto;
+  }
+
+  .sort-label {
+    font-family: var(--font-pixel);
+    font-size: 0.4rem;
+    color: var(--color-muted);
+    letter-spacing: 0.08em;
+  }
+
+  .sort-btn {
+    font-family: var(--font-pixel);
+    font-size: 0.45rem;
+    letter-spacing: 0.05em;
+    background: none;
+    border: 1px solid var(--color-border);
+    color: var(--color-muted);
+    padding: 2px 8px;
+    cursor: pointer;
+  }
+
+  .sort-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .sort-btn[data-active="true"] {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    text-shadow: 0 0 6px var(--color-primary);
   }
 
   .review-list {
@@ -165,3 +219,30 @@ const scoreColor = (score: number) => {
     color: var(--color-muted);
   }
 </style>
+
+<script>
+  type SortKey = "date-desc" | "date-asc" | "title-asc";
+
+  const list = document.querySelector<HTMLElement>(".review-list")!;
+
+  function applySort(key: SortKey) {
+    const cards = [...list.querySelectorAll<HTMLElement>(".review-card")];
+    cards.sort((a, b) => {
+      if (key === "title-asc") {
+        return (a.dataset.title ?? "").localeCompare(b.dataset.title ?? "", "ja");
+      }
+      const da = Number(a.dataset.date);
+      const db = Number(b.dataset.date);
+      return key === "date-asc" ? da - db : db - da;
+    });
+    cards.forEach(c => list.appendChild(c));
+  }
+
+  document.querySelectorAll<HTMLButtonElement>(".sort-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".sort-btn").forEach(b => b.removeAttribute("data-active"));
+      btn.dataset.active = "true";
+      applySort(btn.dataset.sort as SortKey);
+    });
+  });
+</script>

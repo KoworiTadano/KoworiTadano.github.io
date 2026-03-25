@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import Alert from "../components/Alert.astro";
 import BlueSkyFeed from "../components/BlueSkyFeed.astro";
 import YouTubeFeed from "../components/YouTubeFeed.astro";
+import TopReviews from "../components/TopReviews.astro";
 
 const twitter = { text: "Twitter", url: "https://twitter.com/kowori_fallout", handle: "@kowori_fallout", color: "#1d9bf0", icon: "𝕏" };
 const bluesky  = { text: "BlueSky", url: "https://bsky.app/profile/tadakori.bsky.social", handle: "@tadakori.bsky.social", color: "#0085ff", icon: "🦋" };
@@ -39,6 +40,10 @@ const youtube  = { text: "YouTube", url: "https://www.youtube.com/channel/UC2-6v
       <span class="label">[ NOTES ]</span>
       <span class="desc">メモ</span>
     </a>
+    <a href="/library" class="nav-card">
+      <span class="label">[ LIBRARY ]</span>
+      <span class="desc">所持ゲーム一覧</span>
+    </a>
     <a href="/linkz" class="nav-card">
       <span class="label">[ LINKZ ]</span>
       <span class="desc"></span>
@@ -46,6 +51,8 @@ const youtube  = { text: "YouTube", url: "https://www.youtube.com/channel/UC2-6v
   </nav>
 
   <hr />
+
+  <TopReviews />
 
   <div class="social-section">
     <a href={twitter.url} target="_blank" rel="noopener" class="social-card" style={`--card-color: ${twitter.color}`}>

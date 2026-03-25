@@ -98,6 +98,40 @@ const unavailable = [
 
 ---
 
+## Library を編集する
+
+`src/pages/library.astro` の先頭にある `library` 配列を編集する。
+
+**ゲームを追加する:**
+
+```js
+const library = [
+  {
+    platform: "PS4 / PS5",
+    games: [
+      "ゲーム名",
+      // ここに追加
+    ],
+  },
+  // ...
+];
+```
+
+**プラットフォームを追加する:**
+
+```js
+{
+  platform: "新しいプラットフォーム名",
+  games: [
+    "ゲーム名",
+  ],
+},
+```
+
+タイトル数の合計とバッジは自動で更新される。
+
+---
+
 ## Reviews を追加する
 
 `src/content/reviews/` に Markdown ファイルを追加する。
