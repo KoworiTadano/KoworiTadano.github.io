@@ -2,9 +2,13 @@
 import Layout from "../../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 
-const reviews = (await getCollection("reviews")).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-);
+const allReviews = await getCollection("reviews");
+const hallOfFame = allReviews
+  .filter(r => r.data.rank === 0)
+  .sort((a, b) => b.data.score - a.data.score || b.data.date.valueOf() - a.data.date.valueOf());
+const reviews = allReviews
+  .filter(r => r.data.rank !== 0)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 const scoreColor = (score: number) => {
   if (score >= 9) return "#00ffcc";
@@ -58,9 +62,89 @@ const scoreColor = (score: number) => {
       );
     })}
   </div>
+
+  {hallOfFame.length > 0 && (
+    <div class="hall-of-fame">
+      <div class="hof-title">// HALL OF FAME</div>
+      <div class="hof-grid">
+        {hallOfFame.map(review => (
+          <a href={`/reviews#hof-${review.slug}`} class="hof-card">
+            <span class="hof-badge">★</span>
+            <span class="hof-name">{review.data.title}</span>
+            <span class="hof-score" style={`color: ${scoreColor(review.data.score)}`}>
+              {review.data.score}<span class="hof-score-max">/10</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  )}
 </Layout>
 
 <style>
+  .hall-of-fame {
+    margin-top: var(--space-6);
+  }
+
+  .hof-title {
+    font-family: var(--font-pixel);
+    font-size: 0.5rem;
+    color: #ffd700;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-3);
+    text-shadow: 0 0 8px #ffd700;
+  }
+
+  .hof-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-2);
+  }
+
+  .hof-card {
+    border: 1px solid #ffd70066;
+    background: var(--color-surface);
+    padding: var(--space-2) var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-decoration: none;
+    opacity: 0.75;
+    transition: opacity 0.15s;
+  }
+
+  .hof-card:hover {
+    opacity: 1;
+    border-color: #ffd700;
+  }
+
+  .hof-badge {
+    font-size: 0.5rem;
+    color: #ffd700;
+    text-shadow: 0 0 6px #ffd700;
+  }
+
+  .hof-name {
+    font-family: var(--font-pixel);
+    font-size: 0.55rem;
+    color: var(--color-text);
+    letter-spacing: 0.03em;
+    line-height: 1.4;
+  }
+
+  .hof-score {
+    font-family: var(--font-pixel);
+    font-size: 0.9rem;
+    line-height: 1;
+    margin-top: 2px;
+  }
+
+  .hof-score-max {
+    font-size: 0.4rem;
+    color: var(--color-muted);
+    margin-left: 1px;
+  }
+
   .sub {
     font-size: var(--font-sm);
     color: var(--color-muted);

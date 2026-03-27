@@ -15,6 +15,7 @@ const reviews = defineCollection({
     title: z.string(),
     date: z.coerce.date(),
     score: z.number().min(0).max(10),
+    rank: z.number().optional(),
   }),
 });
 

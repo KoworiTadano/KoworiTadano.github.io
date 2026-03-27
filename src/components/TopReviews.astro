@@ -1,10 +1,10 @@
 ---
 import { getCollection } from "astro:content";
 
-// スコア降順、同率は日付降順（新しい順）
-const all = (await getCollection("reviews")).sort(
-  (a, b) => b.data.score - a.data.score || b.data.date.valueOf() - a.data.date.valueOf()
-);
+// 殿堂入り（rank: 0）を除いてスコア降順、同率は日付降順（新しい順）
+const all = (await getCollection("reviews"))
+  .filter(r => r.data.rank !== 0)
+  .sort((a, b) => b.data.score - a.data.score || b.data.date.valueOf() - a.data.date.valueOf());
 
 const picks = all.slice(0, 5);
 
