@@ -20,11 +20,11 @@ const scoreColor = (score: number) => {
 };
 ---
 
+<div class="section-header">
+  <h2 class="section-title">[ TOP REVIEWS ]</h2>
+  <span class="build-date">{buildDate}</span>
+</div>
 <div class="top-reviews">
-  <div class="section-title">
-    <span>// TOP REVIEWS</span>
-    <span class="build-date">{buildDate}</span>
-  </div>
   <ol class="review-list">
     {picks.map((r, i) => (
       <li class="review-item">
@@ -47,20 +47,28 @@ const scoreColor = (score: number) => {
     border: 2px solid var(--color-border);
     background: var(--color-surface);
     padding: var(--space-3) var(--space-4);
-    margin-bottom: var(--space-4);
+    margin: 0 var(--space-5) var(--space-4);
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: var(--space-3);
   }
 
   .section-title {
-    display: flex;
-    justify-content: space-between;
     font-family: var(--font-pixel);
-    font-size: 0.5rem;
-    color: var(--color-muted);
+    font-size: 0.75rem;
+    color: var(--color-primary);
     letter-spacing: 0.1em;
-    margin-bottom: var(--space-2);
+    margin: 0;
   }
 
   .build-date {
+    font-family: var(--font-pixel);
+    font-size: 0.5rem;
+    color: var(--color-muted);
     opacity: 0.6;
   }
 

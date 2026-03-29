@@ -11,13 +11,14 @@ const youtube  = { text: "YouTube", url: "https://www.youtube.com/channel/UC2-6v
 ---
 
 <Layout title="top">
-  <div class="screen">
+  <a href="https://twitter.com/kowori_fallout" class="screen">
     <div class="avatar-wrap">
       <img src="/robot_a.png" alt="" width="64" height="64" class="avatar" />
     </div>
     <p class="handle">&gt; callme tadakori-san.</p>
     <p class="tagline">// lazy play</p>
-  </div>
+    <p class="oracle" id="oracle"></p>
+  </a>
 
   <hr />
 
@@ -44,55 +45,86 @@ const youtube  = { text: "YouTube", url: "https://www.youtube.com/channel/UC2-6v
       <span class="label">[ LIBRARY ]</span>
       <span class="desc">所持ゲーム一覧</span>
     </a>
-    <a href="/linkz" class="nav-card">
-      <span class="label">[ LINKZ ]</span>
-      <span class="desc"></span>
-    </a>
   </nav>
 
   <hr />
 
   <TopReviews />
 
-  <div class="social-section">
-    <a href={twitter.url} target="_blank" rel="noopener" class="social-card" style={`--card-color: ${twitter.color}`}>
-      <span class="social-icon">{twitter.icon}</span>
-      <span class="social-info">
-        <span class="social-name">{twitter.text}</span>
-        <span class="social-handle">{twitter.handle}</span>
-      </span>
-      <span class="social-arrow">→</span>
-    </a>
+  <hr />
 
-    <a href={bluesky.url} target="_blank" rel="noopener" class="social-card" style={`--card-color: ${bluesky.color}`}>
-      <span class="social-icon">{bluesky.icon}</span>
-      <span class="social-info">
-        <span class="social-name">{bluesky.text}</span>
-        <span class="social-handle">{bluesky.handle}</span>
-      </span>
-      <span class="social-arrow">→</span>
-    </a>
-    <BlueSkyFeed />
+  <section id="contact">
+    <h2 class="section-title">[ CONTACT ]</h2>
 
-    <a href={youtube.url} target="_blank" rel="noopener" class="social-card" style={`--card-color: ${youtube.color}`}>
-      <span class="social-icon">{youtube.icon}</span>
-      <span class="social-info">
-        <span class="social-name">{youtube.text}</span>
-        <span class="social-handle">{youtube.handle}</span>
-      </span>
-      <span class="social-arrow">→</span>
-    </a>
-    <YouTubeFeed />
-  </div>
+    <div class="social-section">
+      <a href={twitter.url} target="_blank" rel="noopener" class="social-card" style={`--card-color: ${twitter.color}`}>
+        <span class="social-icon">{twitter.icon}</span>
+        <span class="social-info">
+          <span class="social-name">{twitter.text}</span>
+          <span class="social-handle">{twitter.handle}</span>
+        </span>
+        <span class="social-arrow">→</span>
+      </a>
+
+      <a href={bluesky.url} target="_blank" rel="noopener" class="social-card" style={`--card-color: ${bluesky.color}`}>
+        <span class="social-icon">{bluesky.icon}</span>
+        <span class="social-info">
+          <span class="social-name">{bluesky.text}</span>
+          <span class="social-handle">{bluesky.handle}</span>
+        </span>
+        <span class="social-arrow">→</span>
+      </a>
+      <BlueSkyFeed />
+
+      <a href={youtube.url} target="_blank" rel="noopener" class="social-card" style={`--card-color: ${youtube.color}`}>
+        <span class="social-icon">{youtube.icon}</span>
+        <span class="social-info">
+          <span class="social-name">{youtube.text}</span>
+          <span class="social-handle">{youtube.handle}</span>
+        </span>
+        <span class="social-arrow">→</span>
+      </a>
+      <YouTubeFeed />
+    </div>
+  </section>
 </Layout>
+
+<script>
+const phrases = [
+  // プレイスタイル
+  "MMOを複数渡り歩いているが、全部休止。気が向いたら触る、飽きたら離れる。それだけのこと。",
+  "やるときはやり込む。FF14は7.0まで、DQ10は占い師120まで。やりきったら離れる派。",
+  // 好みの傾向
+  "ストーリーと世界観が好きな、気まぐれ渡り鳥ゲーマー。Fallout だけは別格。",
+  "RPG・シミュレーション中心。90年代のコアなタイトルも守備範囲。レトロへの素養あり。",
+  "Twitter IDが kowori_fallout。それがすべてを物語っている。",
+  // 人となり
+  "lazy play とは言うが、発信はしている。ゆるく共有したい気持ちはある。",
+  "ピクセルフォントとCRT風UIを選ぶ。懐かし系の美意識。",
+];
+
+const el = document.getElementById("oracle");
+if (el) {
+  const picked = phrases[Math.floor(Math.random() * phrases.length)];
+  el.innerHTML = `賢者クロウド曰く　<br>　　🧙‍♂️「${picked}」`;
+}
+</script>
 
 <style>
   .screen {
+    display: block;
     background: var(--color-surface);
     border: var(--pixel-border);
     box-shadow: var(--pixel-shadow);
     padding: var(--space-5);
     margin-bottom: var(--space-5);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .screen:hover {
+    text-decoration: none;
+    border-color: var(--color-primary);
   }
 
   .avatar-wrap {
@@ -117,6 +149,15 @@ const youtube  = { text: "YouTube", url: "https://www.youtube.com/channel/UC2-6v
     color: var(--color-muted);
     margin: 0;
     max-width: none;
+  }
+
+  .oracle {
+    font-size: var(--font-sm);
+    color: var(--color-muted);
+    margin-top: var(--space-3);
+    max-width: none;
+    opacity: 0.7;
+    font-style: italic;
   }
 
   .page-nav {
@@ -155,11 +196,20 @@ const youtube  = { text: "YouTube", url: "https://www.youtube.com/channel/UC2-6v
     color: var(--color-muted);
   }
 
-  /* ソーシャルリンク */
+  /* CONTACT セクション */
+  .section-title {
+    font-family: var(--font-pixel);
+    font-size: 0.75rem;
+    color: var(--color-primary);
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-4);
+  }
+
   .social-section {
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
+    margin: 0 var(--space-5);
   }
 
   .social-card {
