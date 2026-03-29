@@ -31,3 +31,5 @@ docker-compose.*.yml
 .dockerignore
 .git
 .gitignore
+push.sh
+README.md
