@@ -1,6 +1,6 @@
 {
-  "enabled": false,
-  "level": 2,
-  "reason": "おべんきょう",
+  "enabled": true,
+  "level": 3,
+  "reason": "おしごと",
   "detail": "そろそろやらないとマズい気がするぞ！"
 }
