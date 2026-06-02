@@ -1,329 +1,80 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { getCollection } from "astro:content";
+import { allGames, gameStatus, library, statusLabels } from "../data/library";
 
-const reviews = await getCollection("reviews");
-// title（小文字・空白除去）→ slug のMap
-const reviewMap = new Map(
-  reviews.map(r => [r.data.title.toLowerCase().replace(/\s/g, ""), r.slug])
-);
+const scoreColor = (score: number) => {
+  if (score >= 9) return "#00ffcc";
+  if (score >= 7) return "#ffe566";
+  if (score >= 5) return "#ff9500";
+  return "#ff2d78";
+};
 
-const reviewSlug = (gameTitle: string) =>
-  reviewMap.get(gameTitle.toLowerCase().replace(/\s/g, "")) ?? null;
-
-const library = [
-  {
-    platform: "PS4 / PS5",
-    games: [
-      "デモンゲイズ",
-      "PSO2NGS",
-      "ソードアート・オンライン ロストソング",
-      "スカイリム",
-      "ホグワーツレガシー",
-      "NO MAN'S SKY",
-      "Fallout 4",
-      "スーパーロボット大戦V",
-      "DQ10",
-      "PALWORLD",
-      "DQ11",
-      "Rune Factory 4 Special",
-      "Persona 5 the Royal",
-      "OUTER WORLDS",
-      "モナーク",
-      "GTA5",
-      "ソードアート・オンライン Re:ホロウ",
-      "探偵神宮寺三郎 PRISM OF EYES",
-      "ドラゴンエイジ・インクイジション",
-      "METALMAX XENO Reborn",
-      "メタファー",
-      "ドラゴンズ・ドグマ",
-      "KOWLOON'S GATE suzaku VR",
-      "Fallout76",
-      "TALES of ARISE",
-      "DIABLO4",
-      "DIABLO2",
-      "FF14",
-      "FF16",
-      "SOUL HACKERS2",
-      "HORIZON ZERO DAWN",
-      "biohazard HD remaster",
-      "Metal Gear Solid V: Ground Zeroes",
-      "Starfield",
-    ],
-  },
-  {
-    platform: "PS3 / GameArchives",
-    games: [
-      "wizardry 囚われし魂の迷宮",
-      "Dragon's Crown",
-      "Diablo3",
-      "Tetris",
-      "二ノ国 白き聖灰の女王",
-      "ジョジョの奇妙な冒険 未来への遺産 HD",
-      "DAYTONA USA",
-      "真・女神転生 if...",
-      "ワイルドアームズ2nd イグニッション",
-      "FF5",
-      "シルバー事件",
-      "学校であった怖い話S",
-    ],
-  },
-  {
-    platform: "PS/PS2",
-    games: [
-      "KOWLOON'S GATE",
-      "真・女神転生III マニアクス",
-    ],
-  },
-  {
-    platform: "Switch 2",
-    games: [
-      "マリオカート",
-    ],
-  },
-  {
-    platform: "Switch",
-    games: [
-      "真・女神転生V",
-      "どうぶつの森",
-      "ゼノブレイド2",
-      "ゼノブレイド3",
-      "ゼノブレイドクロス",
-    ],
-  },
-  {
-    platform: "XBOX",
-    games: [
-      "Fallout 3",
-      "Fallout: New Vegas",
-      "Saints Row",
-    ],
-  },
-  { platform: "Steam", games: [
-    "ARK: Survival Evolved",
-    "Bayonetta",
-    "BioShock",
-    "BioShock2",
-    "BioShock INFINITE",
-    "Borderlands2",
-    "Deus Ex",
-    "Edge Of Eternity",
-    "Fallout",
-    "Fallout2",
-    "Fallout3",
-    "Fallout4",
-    "Fallout76",
-    "Fallout: new vegas",
-    "Fallout Tactics",
-    "月英学園",
-    "Grim Dawn",
-    "Just Cause 3",
-    "Kenshi",
-    "LYNE",
-    "MotoGP14",
-    "Observer",
-    "POSTAL 2",
-    "Saints Row 2",
-    "Saints Row: The Third",
-    "Saints Row: IV",
-    "Saints Row: Gat out of Hell",
-    "Shadowrun Returns",
-    "Shadowrun: Dragonfall",
-    "Shadowrun: Hong Kong",
-    "Skyrim",
-    "Titan Quest",
-    "Watch Dogs 2",
-    "The Witcher",
-    "GTA5",
-    "Cyberpunk 2077",
-    "モンスターハンター: ワールド",
-  ] },
-  {
-    platform: "FC",
-    games: [
-      "ドンキーコング",
-      "女神転生",
-      "女神転生2",
-      "星のカービィ",
-      "ポートピア連続殺人事件",
-      "FF2",
-      "FF3",
-      "DQ2",
-      "スーパーマリオブラザーズ",
-      "スーパーマリオブラザーズ3",
-      "スターソルジャー",
-      "DQ4",
-      "ワルキューレの冒険",
-      "バイナリィランド",
-      "DQ3",
-      "ヨッシーのクッキー",
-      "ボンバーマン",
-      "Tetris",
-      "けっきょく南極大冒険",
-      "ドルアーガの塔",
-      "クルクルランド",
-      "迷宮組曲",
-      "マリオブラザーズ",
-    ],
-  },
-  {
-    platform: "SFC",
-    games: [
-      "スーパーマリオコレクション",
-      "聖剣伝説2",
-      "聖剣伝説3",
-      "DQ1&2",
-      "DQ6",
-      "真・女神転生",
-      "ファイアーエムブレム 紋章の謎",
-      "スーパーマリオカート",
-      "FF4",
-      "スーパーマリオRPG",
-      "ゼルダの伝説 神々のトライフォース",
-      "真・女神転生 if...",
-      "魔神転生",
-      "ジョジョの奇妙な冒険",
-      "真・女神転生II",
-      "スーパーロボット大戦EX",
-      "ロマンシング サ・ガ 3",
-      "DQ5",
-      "魔神転生II",
-      "FF5",
-      "LastBibleIII",
-      "旧約・女神転生",
-      "F-ZERO",
-      "すーぱーぷよぷよ",
-      "すーぱーぷよぷよ通",
-      "ブレスオブファイア",
-      "スーパーピクロス",
-    ],
-  },
-  { platform: "MD", games: [] },
-  { platform: "PCE", games: ["邪聖剣ネクロマンサー"] },
-  {
-    platform: "GB / GBA",
-    games: [
-      "ラストバイブル",
-      "ラストバイブル2",
-      "SDコマンドガンダム G-ARMS オペレーションガンダム",
-      "モンスターメーカー",
-      "パルテナの鏡",
-      "サガ2",
-      "サガ3",
-      "ネメシス",
-      "DQ3",
-      "役満",
-      "パロディウスだ！",
-      "聖剣伝説",
-      "ポケットモンスター赤",
-      "倉庫番",
-      "ドラゴンクエストモンスターズ",
-      "TETRIS",
-      "トランプボーイ",
-      "アイスクライマー",
-      "デビルチルドレン 黒の書",
-      "デビルチルドレン 白の書",
-      "探偵神宮寺三郎 白い影の少女",
-      "テイルズ オブ ファンタジア",
-      "Wizardry外伝I 女王の受難",
-      "Wizardry外伝II 古代皇帝の呪い",
-    ],
-  },
-  { platform: "DS / 3DS", games: [
-    "女神異聞録 デビルサバイバー",
-    "デビルサバイバー2",
-    "デビルサバイバー2 ブレイクレコード",
-    "デビルサマナー SOULHACKERS",
-    "真・女神転生 STRANGE JOURNEY",
-    "真・女神転生IV",
-    "真・女神転生IV FINAL",
-    "英語漬け",
-    "もっと英語漬け",
-    "THE麻雀",
-    "BRAVELY DEFAULT",
-    "DQ5",
-    "DQ6",
-    "DQ7",
-    "DQ9",
-    "METALMAX2:ReLOADED",
-    "METALMAX3",
-    "METALMAX4",
-    "サガ2 秘宝伝説",
-  ] },
-  {
-    platform: "N64",
-    games: [
-      "スターフォックス64",
-    ],
-  },
-  {
-    platform: "GC",
-    games: [
-      "ピクミン",
-    ],
-  },
-  {
-    platform: "Wii / WiiU",
-    games: [
-      "スプラトゥーン",
-      "ニュー・スーパーマリオブラザーズ・Wii",
-    ],
-  },
-  { platform: "MSX / MSX2", games: [] },
-  {
-    platform: "Windows",
-    games: [
-      "偽典・女神転生",
-      "女神転生IMAGINE",
-      "銀河英雄伝説IV EX",
-      "Diablo II",
-      "DOOM II",
-    ],
-  },
-  {
-    platform: "PC-9801/9821",
-    games: [
-      "幻影都市",
-      "偽典・女神転生",
-      "ブルトンレイ","天下統一II"
-    ],
-  },
-  {
-    platform: "Game&Watch",
-    games: [
-      "スーパーマリオブラザーズ",
-    ],
-  },
-];
-
-const total = library.reduce((sum, p) => sum + p.games.length, 0);
+const total = allGames.length;
+const backlogTotal = allGames.filter(game => gameStatus(game) === "backlog").length;
 ---
 
-<Layout title="library" description="所持ゲーム一覧">
-  <h1>LIBRARY <span class="collection-type">// Physical &amp; Digital Collection</span></h1>
-  <div class="header-row">
-    <p class="sub">// {total} titles in collection</p>
+<Layout title="library" description="所持ゲーム一覧と点数とステータス">
+  <h1>LIBRARY <span class="collection-type">// Collection Status &amp; Scores</span></h1>
+  <div class="db-header terminal-panel">
+    <div>
+      <span class="db-label">DATABASE</span>
+      <span class="db-value">KOWORI_GAME_ARCHIVE</span>
+    </div>
+    <div>
+      <span class="db-label">RECORDS</span>
+      <span class="db-value">{total}</span>
+    </div>
+    <div>
+      <span class="db-label">VAULT</span>
+      <span class="db-value">{backlogTotal}/{total}</span>
+    </div>
     <div class="sort-controls">
       <button class="sort-btn" data-sort="asc" data-active="true">ASC</button>
       <button class="sort-btn" data-sort="desc">DESC</button>
     </div>
   </div>
 
+  <dl class="status-guide terminal-panel">
+    <div>
+      <dt class="status-text active">ACTIVE</dt>
+      <dd>&gt; playing now</dd>
+    </div>
+    <div>
+      <dt class="status-text backlog">VAULT</dt>
+      <dd>&gt; backlog / parked</dd>
+    </div>
+    <div>
+      <dt class="status-text cleared">CLEAR</dt>
+      <dd>&gt; finished enough</dd>
+    </div>
+  </dl>
+
   <div class="platform-grid">
     {library.filter(g => g.games.length > 0).map(group => (
-      <div class="platform-box">
-        <div class="platform-label">{group.platform}</div>
-        <div class="count-badge">{group.games.length} titles</div>
+      <div class="platform-box terminal-panel">
+        <div class="terminal-titlebar">
+          <span>FILE: {group.platform}</span>
+          <span class="terminal-meta">{group.games.length} RECORDS</span>
+        </div>
         <ul>
           {group.games.map(g => {
-            const slug = reviewSlug(g);
+            const status = gameStatus(g);
             return (
               <li>
-                <span class="bullet">-</span>
-                {slug
-                  ? <a href={`/reviews#${slug}`} class="reviewed">{g}</a>
-                  : g
-                }
+                <span class="bullet">&gt;</span>
+                <span class="game-title">{g.title}</span>
+                {g.score !== undefined && (
+                  <span
+                    class:list={["score-badge", { "hall-of-fame": g.rank === 0 }]}
+                    style={`color: ${scoreColor(g.score)}; border-color: ${scoreColor(g.score)}66;`}
+                  >
+                    {g.rank === 0 && <span class="score-star">★</span>}
+                    {g.score}<span class="score-max">/10</span>
+                  </span>
+                )}
+                <span class:list={["status-badge", status]}>
+                  {statusLabels[status]}
+                </span>
               </li>
             );
           })}
@@ -335,8 +86,11 @@ const total = library.reduce((sum, p) => sum + p.games.length, 0);
   {library.some(g => g.games.length === 0) && (
     <div class="tbd-grid">
       {library.filter(g => g.games.length === 0).map(group => (
-        <div class="platform-box empty">
-          <div class="platform-label">{group.platform}</div>
+        <div class="platform-box empty terminal-panel">
+          <div class="terminal-titlebar">
+            <span>FILE: {group.platform}</span>
+            <span class="terminal-meta">NO DATA</span>
+          </div>
           <div class="tbd">// TBD</div>
         </div>
       ))}
@@ -345,9 +99,9 @@ const total = library.reduce((sum, p) => sum + p.games.length, 0);
 
   <div class="lostfound-section">
     <h2 class="lostfound-title">🗑️ LOST &amp; FOUND</h2>
-    <div class="platform-box lostfound-box">
+    <div class="platform-box lostfound-box terminal-panel">
       <ul>
-        <li><span class="bullet">-</span>エグゾイドZ</li>
+        <li><span class="bullet">&gt;</span>エグゾイドZ</li>
       </ul>
     </div>
   </div>
@@ -363,21 +117,91 @@ const total = library.reduce((sum, p) => sum + p.games.length, 0);
     letter-spacing: 0.1em;
   }
 
-  .sub {
-    font-size: var(--font-sm);
-    color: var(--color-muted);
-  }
-
   .platform-grid {
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
   }
 
-  .platform-box {
-    border: 2px solid var(--color-border);
-    background: var(--color-surface);
+  .db-header {
+    display: grid;
+    grid-template-columns: 1.5fr 0.7fr 0.8fr auto;
+    gap: var(--space-3);
+    align-items: center;
     padding: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .db-header > div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .db-label {
+    font-family: var(--font-pixel);
+    font-size: 0.38rem;
+    color: var(--color-muted);
+    letter-spacing: 0.08em;
+  }
+
+  .db-value {
+    font-family: var(--font-pixel);
+    font-size: 0.55rem;
+    color: var(--color-primary);
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 6px var(--color-primary);
+  }
+
+  .status-guide {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-2);
+    margin: 0 0 var(--space-4);
+  }
+
+  .status-guide div {
+    padding: var(--space-2) var(--space-3);
+    border-left: 1px solid var(--color-border);
+  }
+
+  .status-guide div:first-child {
+    border-left: none;
+  }
+
+  .status-guide dt {
+    font-family: var(--font-pixel);
+    font-size: 0.45rem;
+    letter-spacing: 0.08em;
+  }
+
+  .status-guide dd {
+    margin: 4px 0 0;
+    color: var(--color-muted);
+    font-size: var(--font-sx);
+  }
+
+  @media (max-width: 600px) {
+    .db-header {
+      grid-template-columns: 1fr;
+    }
+
+    .status-guide {
+      grid-template-columns: 1fr;
+    }
+
+    .status-guide div {
+      border-left: none;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .status-guide div:first-child {
+      border-top: none;
+    }
+  }
+
+  .platform-box {
+    padding: 0;
   }
 
   .tbd-grid {
@@ -419,28 +243,13 @@ const total = library.reduce((sum, p) => sum + p.games.length, 0);
     font-size: 0.4rem;
     color: var(--color-muted);
     letter-spacing: 0.1em;
-  }
-
-  .platform-label {
-    font-family: var(--font-pixel);
-    font-size: 0.5rem;
-    color: var(--color-accent);
-    letter-spacing: 0.1em;
-    margin-bottom: var(--space-1);
-    padding-bottom: var(--space-2);
-    border-bottom: 1px dashed var(--color-border);
-  }
-
-  .count-badge {
-    font-family: var(--font-pixel);
-    font-size: 0.4rem;
-    color: var(--color-muted);
-    margin-bottom: var(--space-2);
+    padding: var(--space-3);
   }
 
   .platform-box ul {
     list-style: none;
     margin: 0;
+    padding: var(--space-3);
     font-size: var(--font-sm);
     columns: 3;
     column-gap: var(--space-5);
@@ -453,38 +262,93 @@ const total = library.reduce((sum, p) => sum + p.games.length, 0);
   .platform-box li {
     margin-bottom: var(--space-1);
     color: var(--color-text);
+    break-inside: avoid;
   }
 
   .bullet {
-    color: var(--color-muted);
-    margin-right: 4px;
-  }
-
-  a.reviewed {
     color: var(--color-primary);
-    text-decoration: none;
+    margin-right: 4px;
+    font-family: var(--font-pixel);
+    font-size: 0.48rem;
   }
 
-  a.reviewed:hover {
-    text-decoration: underline;
+  .game-title {
+    margin-right: 6px;
   }
 
-  .header-row {
-    display: flex;
+  .score-badge {
+    display: inline-flex;
     align-items: baseline;
-    gap: var(--space-4);
-    flex-wrap: wrap;
-    margin-bottom: var(--space-3);
+    gap: 1px;
+    border: 1px solid;
+    padding: 1px 4px;
+    font-family: var(--font-pixel);
+    font-size: 0.42rem;
+    line-height: 1.4;
+    white-space: nowrap;
+    text-shadow: 0 0 6px currentColor;
+    vertical-align: 1px;
   }
 
-  .sub {
-    margin: 0;
+  .score-badge.hall-of-fame {
+    border-color: #ffd70099 !important;
+  }
+
+  .score-star {
+    color: #ffd700;
+    margin-right: 2px;
+  }
+
+  .score-max {
+    color: var(--color-muted);
+    font-size: 0.34rem;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--color-border);
+    padding: 1px 5px;
+    font-family: var(--font-pixel);
+    font-size: 0.38rem;
+    line-height: 1.4;
+    white-space: nowrap;
+    vertical-align: 1px;
+  }
+
+  .status-badge.active {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    text-shadow: 0 0 6px var(--color-primary);
+  }
+
+  .status-text.active {
+    color: var(--color-primary);
+    text-shadow: 0 0 6px var(--color-primary);
+  }
+
+  .status-badge.backlog {
+    border-color: var(--color-muted);
+    color: var(--color-muted);
+  }
+
+  .status-text.backlog {
+    color: var(--color-muted);
+  }
+
+  .status-badge.cleared {
+    border-color: #1f7f4c;
+    color: #1f7f4c;
+  }
+
+  .status-text.cleared {
+    color: #1f7f4c;
   }
 
   .sort-controls {
     display: flex;
     gap: var(--space-2);
-    margin-left: auto;
+    justify-content: flex-end;
   }
 
   .sort-btn {

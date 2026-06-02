@@ -1,13 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Alert from "../components/Alert.astro";
-import BlueSkyFeed from "../components/BlueSkyFeed.astro";
-import YouTubeFeed from "../components/YouTubeFeed.astro";
-import TopReviews from "../components/TopReviews.astro";
+import { allGames, gameStatus, statusLabels } from "../data/library";
 
 const twitter = { text: "Twitter", url: "https://twitter.com/kowori_fallout", handle: "@kowori_fallout", color: "#1d9bf0", icon: "𝕏" };
 const bluesky  = { text: "BlueSky", url: "https://bsky.app/profile/tadakori.bsky.social", handle: "@tadakori.bsky.social", color: "#0085ff", icon: "🦋" };
 const youtube  = { text: "YouTube", url: "https://www.youtube.com/channel/UC2-6vCCrGTqCDE6tTQ9TtKw", handle: "ただこりさんち", color: "#ff0000", icon: "▶" };
+
+const activeGames = allGames.filter(game => gameStatus(game) === "active");
+const backlogTotal = allGames.filter(game => gameStatus(game) === "backlog").length;
+const totalGames = allGames.length;
 ---
 
 <Layout title="top">
@@ -24,32 +26,46 @@ const youtube  = { text: "YouTube", url: "https://www.youtube.com/channel/UC2-6v
 
   <Alert />
 
-  <nav class="page-nav">
-    <a href="/games" class="nav-card">
-      <span class="label">[ NOW PLAYING ]</span>
-      <span class="desc">プレイ中のゲーム</span>
+  <section class="status-panel">
+    <div class="terminal-panel status-box">
+      <div class="terminal-titlebar">
+        <span>STATUS: ACTIVE PLAY</span>
+        <span class="terminal-meta">LIVE</span>
+      </div>
+      {activeGames.length > 0 ? (
+        <ul class="active-list">
+          {activeGames.map(game => (
+            <li>
+              <span class="active-marker">▶</span>
+              <span>{game.title}</span>
+              <span class="active-platform">{game.platform}</span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="empty-status">&gt; no active games_</p>
+      )}
+    </div>
+    <a href="/library" class="terminal-panel vault-meter">
+      <span class="meter-label">{statusLabels.backlog}</span>
+      <span class="meter-fraction">
+        <span>{backlogTotal}</span>
+        <span class="slash">/</span>
+        <span>{totalGames}</span>
+      </span>
     </a>
-    <a href="/machines" class="nav-card">
+  </section>
+
+  <nav class="page-nav">
+    <a href="/machines" class="nav-card terminal-panel">
       <span class="label">[ MACHINES ]</span>
       <span class="desc">所持ゲーム機</span>
     </a>
-    <a href="/reviews" class="nav-card">
-      <span class="label">[ REVIEWS ]</span>
-      <span class="desc">ただこりさんによる独断と偏見</span>
-    </a>
-    <a href="/notes" class="nav-card">
-      <span class="label">[ NOTES ]</span>
-      <span class="desc">メモ</span>
-    </a>
-    <a href="/library" class="nav-card">
+    <a href="/library" class="nav-card terminal-panel">
       <span class="label">[ LIBRARY ]</span>
-      <span class="desc">所持ゲーム一覧</span>
+      <span class="desc">所持ゲーム一覧と点数</span>
     </a>
   </nav>
-
-  <hr />
-
-  <TopReviews />
 
   <hr />
 
@@ -57,7 +73,7 @@ const youtube  = { text: "YouTube", url: "https://www.youtube.com/channel/UC2-6v
     <h2 class="section-title">[ CONTACT ]</h2>
 
     <div class="social-section">
-      <a href={twitter.url} target="_blank" rel="noopener" class="social-card" style={`--card-color: ${twitter.color}`}>
+      <a href={twitter.url} target="_blank" rel="noopener" class="social-card terminal-panel" style={`--card-color: ${twitter.color}`}>
         <span class="social-icon">{twitter.icon}</span>
         <span class="social-info">
           <span class="social-name">{twitter.text}</span>
@@ -66,7 +82,7 @@ const youtube  = { text: "YouTube", url: "https://www.youtube.com/channel/UC2-6v
         <span class="social-arrow">→</span>
       </a>
 
-      <a href={bluesky.url} target="_blank" rel="noopener" class="social-card" style={`--card-color: ${bluesky.color}`}>
+      <a href={bluesky.url} target="_blank" rel="noopener" class="social-card terminal-panel" style={`--card-color: ${bluesky.color}`}>
         <span class="social-icon">{bluesky.icon}</span>
         <span class="social-info">
           <span class="social-name">{bluesky.text}</span>
@@ -74,9 +90,8 @@ const youtube  = { text: "YouTube", url: "https://www.youtube.com/channel/UC2-6v
         </span>
         <span class="social-arrow">→</span>
       </a>
-      <BlueSkyFeed />
 
-      <a href={youtube.url} target="_blank" rel="noopener" class="social-card" style={`--card-color: ${youtube.color}`}>
+      <a href={youtube.url} target="_blank" rel="noopener" class="social-card terminal-panel" style={`--card-color: ${youtube.color}`}>
         <span class="social-icon">{youtube.icon}</span>
         <span class="social-info">
           <span class="social-name">{youtube.text}</span>
@@ -84,7 +99,6 @@ const youtube  = { text: "YouTube", url: "https://www.youtube.com/channel/UC2-6v
         </span>
         <span class="social-arrow">→</span>
       </a>
-      <YouTubeFeed />
     </div>
   </section>
 </Layout>
@@ -92,21 +106,27 @@ const youtube  = { text: "YouTube", url: "https://www.youtube.com/channel/UC2-6v
 <script>
 const phrases = [
   // プレイスタイル
-  "MMOを複数渡り歩いているが、全部休止。気が向いたら触る、飽きたら離れる。それだけのこと。",
-  "やるときはやり込む。FF14は7.0まで、DQ10は占い師120まで。やりきったら離れる派。",
+  { source: "賢者クロウド曰く", text: "MMOを複数渡り歩いているが、全部休止。気が向いたら触る、飽きたら離れる。それだけのこと。" },
+  { source: "賢者クロウド曰く", text: "やるときはやり込む。FF14は7.0まで、DQ10は占い師120まで。やりきったら離れる派。" },
   // 好みの傾向
-  "ストーリーと世界観が好きな、気まぐれ渡り鳥ゲーマー。Fallout だけは別格。",
-  "RPG・シミュレーション中心。90年代のコアなタイトルも守備範囲。レトロへの素養あり。",
-  "Twitter IDが kowori_fallout。それがすべてを物語っている。",
+  { source: "賢者クロウド曰く", text: "ストーリーと世界観が好きな、気まぐれ渡り鳥ゲーマー。Fallout だけは別格。" },
+  { source: "賢者クロウド曰く", text: "RPG・シミュレーション中心。90年代のコアなタイトルも守備範囲。レトロへの素養あり。" },
+  { source: "賢者クロウド曰く", text: "Twitter IDが kowori_fallout。それがすべてを物語っている。" },
   // 人となり
-  "lazy play とは言うが、発信はしている。ゆるく共有したい気持ちはある。",
-  "ピクセルフォントとCRT風UIを選ぶ。懐かし系の美意識。",
+  { source: "賢者クロウド曰く", text: "lazy play とは言うが、発信はしている。ゆるく共有したい気持ちはある。" },
+  { source: "賢者クロウド曰く", text: "ピクセルフォントとCRT風UIを選ぶ。懐かし系の美意識。" },
+  // Codex
+  { source: "電子写本より抜粋", text: "遊ぶゲームを棚に並べるだけでなく、状態を付けて眺めたい人。攻略より先に、自分の遊び方を整理するのが好き。" },
+  { source: "電子写本より抜粋", text: "Fallout、女神転生、古いPCゲームに反応する。明るい冒険譚より、少し壊れた世界や変な思想のあるRPGに惹かれる。" },
+  { source: "電子写本より抜粋", text: "積みゲーを罪とは呼ばず、保管庫に眠る資産として扱うタイプ。いつか戻る余地をちゃんと残している。" },
+  { source: "電子写本より抜粋", text: "コメントを書くより点数を置くほうが性に合う。語りすぎないが、10点の棚にはかなり強い信仰がある。" },
+  { source: "電子写本より抜粋", text: "サイト全体に、古い端末と個人BBSの気配を残している。派手に見せるより、自分の基地として落ち着くことを優先する。" },
 ];
 
 const el = document.getElementById("oracle");
 if (el) {
   const picked = phrases[Math.floor(Math.random() * phrases.length)];
-  el.innerHTML = `賢者クロウド曰く　<br>　　🧙‍♂️「${picked}」`;
+  el.innerHTML = `${picked.source}<br>　　「${picked.text}」`;
 }
 </script>
 
@@ -172,15 +192,13 @@ if (el) {
     flex-direction: column;
     gap: var(--space-1);
     padding: var(--space-3) var(--space-4);
-    border: 2px solid var(--color-border);
-    background: var(--color-surface);
     text-decoration: none;
     transition: border-color 0.1s, box-shadow 0.1s;
   }
 
   .nav-card:hover {
     border-color: var(--color-primary);
-    box-shadow: var(--pixel-shadow);
+    box-shadow: var(--panel-shadow), var(--pixel-shadow);
     text-decoration: none;
   }
 
@@ -194,6 +212,105 @@ if (el) {
   .nav-card .desc {
     font-size: var(--font-sm);
     color: var(--color-muted);
+  }
+
+  .status-panel {
+    display: grid;
+    grid-template-columns: 1fr minmax(160px, 220px);
+    gap: var(--space-3);
+    align-items: stretch;
+    margin-bottom: var(--space-5);
+  }
+
+  .status-box,
+  .vault-meter {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .status-box {
+    padding: 0;
+  }
+
+  .status-box .active-list,
+  .status-box .empty-status {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .active-list {
+    list-style: none;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .active-list li {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    margin: 0;
+    font-size: var(--font-sm);
+  }
+
+  .active-marker {
+    color: var(--color-primary);
+    font-size: 0.6rem;
+    text-shadow: 0 0 6px var(--color-primary);
+  }
+
+  .active-platform {
+    color: var(--color-muted);
+    font-size: var(--font-sx);
+    margin-left: auto;
+  }
+
+  .empty-status {
+    margin: 0;
+    color: var(--color-muted);
+    font-family: var(--font-pixel);
+    font-size: 0.5rem;
+  }
+
+  .vault-meter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-2);
+    text-decoration: none;
+  }
+
+  .vault-meter:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--panel-shadow), var(--pixel-shadow);
+    text-decoration: none;
+  }
+
+  .meter-label {
+    font-family: var(--font-pixel);
+    font-size: 0.48rem;
+    color: var(--color-muted);
+    letter-spacing: 0.08em;
+  }
+
+  .meter-fraction {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    font-family: var(--font-pixel);
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    text-shadow: 0 0 8px var(--color-primary);
+  }
+
+  .slash {
+    color: var(--color-muted);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 600px) {
+    .status-panel {
+      grid-template-columns: 1fr;
+    }
   }
 
   /* CONTACT セクション */
@@ -217,8 +334,6 @@ if (el) {
     align-items: center;
     gap: var(--space-3);
     padding: var(--space-3) var(--space-4);
-    background: var(--color-surface);
-    border: 2px solid var(--color-border);
     border-left: 4px solid var(--card-color);
     text-decoration: none;
     transition: border-color 0.1s, background 0.1s;
@@ -227,6 +342,7 @@ if (el) {
   .social-card:hover {
     background: #1a1a3a;
     border-color: var(--card-color);
+    box-shadow: var(--panel-shadow), 3px 3px 0px var(--card-color);
     text-decoration: none;
   }
 

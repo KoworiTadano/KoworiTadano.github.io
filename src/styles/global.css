@@ -3,6 +3,7 @@
 :root {
   --color-bg: #0a0a1a;
   --color-surface: #12122a;
+  --color-surface-dark: #0d0d20;
   --color-border: #2a2a5a;
   --color-primary: #00ffcc;
   --color-accent: #ff2d78;
@@ -31,6 +32,7 @@
   --pixel-border: 3px solid var(--color-primary);
   --pixel-shadow: 4px 4px 0px var(--color-primary);
   --pixel-shadow-accent: 4px 4px 0px var(--color-accent);
+  --panel-shadow: inset 0 0 0 1px #000, 3px 3px 0px #050510;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -58,8 +60,8 @@ body::before {
     0deg,
     transparent,
     transparent 2px,
-    rgba(0, 0, 0, 0.08) 2px,
-    rgba(0, 0, 0, 0.08) 4px
+    rgba(0, 0, 0, 0.055) 2px,
+    rgba(0, 0, 0, 0.055) 4px
   );
   pointer-events: none;
   z-index: 9999;
@@ -118,4 +120,31 @@ hr {
   border: none;
   border-top: 2px dashed var(--color-border);
   margin: var(--space-5) 0;
+}
+
+.terminal-panel {
+  border: 2px solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: var(--panel-shadow);
+}
+
+.terminal-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface-dark);
+  font-family: var(--font-pixel);
+  font-size: 0.45rem;
+  letter-spacing: 0.08em;
+  color: var(--color-primary);
+}
+
+.terminal-meta {
+  color: var(--color-muted);
+  font-family: var(--font-pixel);
+  font-size: 0.4rem;
+  letter-spacing: 0.08em;
 }

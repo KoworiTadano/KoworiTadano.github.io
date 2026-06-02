@@ -8,10 +8,8 @@ const { title, description = "kowori.net — lazy play" } = Astro.props;
 
 const navLinks = [
   { text: "TOP", href: "/" },
-  { text: "NOW PLAYING", href: "/games" },
   { text: "MACHINES", href: "/machines" },
-  { text: "REVIEWS", href: "/reviews" },
-  { text: "NOTES", href: "/notes" },
+  { text: "LIBRARY", href: "/library" },
   { text: "CONTACT", href: "/#contact" },
 ];
 
@@ -58,7 +56,7 @@ const currentPath = Astro.url.pathname;
       <div class="content">
         <span class="muted">© {new Date().getFullYear()} kowori tadano</span>
         <span class="muted"> // </span>
-        <span class="muted">built with astro</span>
+        <span class="muted">DB: STATIC / built with astro</span>
       </div>
     </footer>
   </body>
@@ -107,11 +105,23 @@ const currentPath = Astro.url.pathname;
     50% { opacity: 0; }
   }
 
+  @media (max-width: 980px) {
+    .header-inner {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    nav {
+      width: 100%;
+    }
+  }
+
   nav {
     display: flex;
     gap: var(--space-3);
-    flex-wrap: nowrap;
-    overflow-x: auto;
+    flex-wrap: wrap;
+    overflow: visible;
   }
 
   .nav-link {

@@ -33,3 +33,6 @@ docker-compose.*.yml
 .gitignore
 push.sh
 README.md
+
+#Codex
+AGENTS.md
