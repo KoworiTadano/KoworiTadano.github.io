@@ -1,6 +1,6 @@
 {
-  "enabled": false,
-  "level": 3,
-  "reason": "おしごと",
-  "detail": "そろそろやらないとマズい気がするぞ！"
+  "enabled": true,
+  "level": 1,
+  "reason": "近況",
+  "detail": "構成すこしかえてみました"
 }
