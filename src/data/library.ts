@@ -67,7 +67,7 @@ export const games: Game[] = [
   { title: "DQ11", editions: [{ platform: "PS4 / PS5", status: "cleared" }] },
   { title: "Rune Factory 4 Special", editions: [{ platform: "PS4 / PS5", status: "active" }] },
   { title: "Persona 5 the Royal", editions: [{ platform: "PS4 / PS5", status: "cleared" }] },
-  { title: "OUTER WORLDS", editions: [{ platform: "PS4 / PS5", status: "backlog", score: 8 }] },
+  { title: "OUTER WORLDS", editions: [{ platform: "PS4 / PS5", status: "backlog", score: 8 },{ platform: "Windows", status: "cleared", score: 8 }] },
   { title: "モナーク", editions: [{ platform: "PS4 / PS5", status: "cleared", score: 7 }] },
   {
     title: "GTA5",
@@ -95,7 +95,7 @@ export const games: Game[] = [
   { title: "DIABLO2", editions: [{ platform: "PS4 / PS5", status: "backlog", score: 10, rank: 0 }] },
   { title: "FF14", editions: [{ platform: "PS4 / PS5", status: "active" }] },
   { title: "FF16", editions: [{ platform: "PS4 / PS5", status: "cleared" }] },
-  { title: "SOUL HACKERS2", editions: [{ platform: "PS4 / PS5", status: "backlog" }] },
+  { title: "SOUL HACKERS2", editions: [{ platform: "PS4 / PS5", status: "cleared" }] },
   { title: "HORIZON ZERO DAWN", editions: [{ platform: "PS4 / PS5", status: "backlog" }] },
   { title: "biohazard HD remaster", editions: [{ platform: "PS4 / PS5", status: "backlog" }] },
   { title: "Metal Gear Solid V: Ground Zeroes", editions: [{ platform: "PS4 / PS5", status: "backlog" }] },
@@ -125,7 +125,7 @@ export const games: Game[] = [
     title: "FF5",
     editions: [
       { platform: "PS3 / GameArchives", status: "cleared" },
-      { platform: "SFC", status: "backlog" },
+      { platform: "SFC", status: "cleared" },
     ],
   },
   { title: "シルバー事件", editions: [{ platform: "PS3 / GameArchives", status: "cleared" }] },
@@ -200,7 +200,7 @@ export const games: Game[] = [
     title: "DQ3",
     editions: [
       { platform: "FC", status: "cleared" },
-      { platform: "GB / GBA", status: "backlog" },
+      { platform: "GB / GBA", status: "cleared" },
     ],
   },
   { title: "ヨッシーのクッキー", editions: [{ platform: "FC", status: "backlog" }] },
@@ -258,7 +258,7 @@ export const games: Game[] = [
   { title: "ネメシス", editions: [{ platform: "GB / GBA", status: "backlog" }] },
   { title: "役満", editions: [{ platform: "GB / GBA", status: "backlog" }] },
   { title: "パロディウスだ！", editions: [{ platform: "GB / GBA", status: "backlog" }] },
-  { title: "聖剣伝説", editions: [{ platform: "GB / GBA", status: "backlog" }] },
+  { title: "聖剣伝説", editions: [{ platform: "GB / GBA", status: "cleared" }] },
   { title: "ポケットモンスター赤", editions: [{ platform: "GB / GBA", status: "backlog" }] },
   { title: "倉庫番", editions: [{ platform: "GB / GBA", status: "backlog" }] },
   { title: "ドラゴンクエストモンスターズ", editions: [{ platform: "GB / GBA", status: "backlog" }] },
@@ -304,7 +304,7 @@ export const games: Game[] = [
   { title: "Diablo II", editions: [{ platform: "Windows", status: "cleared" }] },
   { title: "DOOM II", editions: [{ platform: "Windows", status: "backlog" }] },
   { title: "幻影都市", editions: [{ platform: "PC-9801/9821", status: "cleared", score: 10, rank: 0 }] },
-  { title: "ブルトンレイ", editions: [{ platform: "PC-9801/9821", status: "backlog" }] },
+  { title: "ブルトンレイ", editions: [{ platform: "PC-9801/9821", status: "cleared" }] },
   { title: "天下統一II", editions: [{ platform: "PC-9801/9821", status: "backlog" }] },
   { title: "FGO", editions: [{ platform: "Mobile", status: "backlog" }] },
 ];
