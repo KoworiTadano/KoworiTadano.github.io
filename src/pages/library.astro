@@ -29,29 +29,36 @@ const backlogTotal = allGames.filter(game => gameStatus(game) === "backlog").len
       <span class="db-value">{backlogTotal}/{total}</span>
     </div>
     <div class="sort-controls">
-      <button class="sort-btn" data-sort="asc" data-active="true">ASC</button>
-      <button class="sort-btn" data-sort="desc">DESC</button>
+      <button class="sort-btn" data-view-mode="files" data-active="true">FILES</button>
+      <button class="sort-btn" data-view-mode="asc">ASC</button>
+      <button class="sort-btn" data-view-mode="desc">DESC</button>
     </div>
   </div>
 
   <dl class="status-guide terminal-panel">
-    <div>
-      <dt class="status-text active">ACTIVE</dt>
+    <div data-status-filter-cell="active">
+      <dt>
+        <button class="status-filter status-text active" data-status-filter="active" type="button">ACTIVE</button>
+      </dt>
       <dd>&gt; playing now</dd>
     </div>
-    <div>
-      <dt class="status-text backlog">VAULT</dt>
+    <div data-status-filter-cell="backlog">
+      <dt>
+        <button class="status-filter status-text backlog" data-status-filter="backlog" type="button">VAULT</button>
+      </dt>
       <dd>&gt; backlog / parked</dd>
     </div>
-    <div>
-      <dt class="status-text cleared">CLEAR</dt>
+    <div data-status-filter-cell="cleared">
+      <dt>
+        <button class="status-filter status-text cleared" data-status-filter="cleared" type="button">CLEAR</button>
+      </dt>
       <dd>&gt; finished enough</dd>
     </div>
   </dl>
 
   <div class="platform-grid">
     {library.filter(g => g.games.length > 0).map(group => (
-      <div class="platform-box terminal-panel">
+      <div class="platform-box terminal-panel" data-platform-box>
         <div class="terminal-titlebar">
           <span>FILE: {group.platform}</span>
           <span class="terminal-meta">{group.games.length} RECORDS</span>
@@ -60,7 +67,7 @@ const backlogTotal = allGames.filter(game => gameStatus(game) === "backlog").len
           {group.games.map(g => {
             const status = gameStatus(g);
             return (
-              <li>
+              <li data-status={status}>
                 <span class="bullet">&gt;</span>
                 <span class="game-title">{g.title}</span>
                 {g.score !== undefined && (
@@ -83,8 +90,51 @@ const backlogTotal = allGames.filter(game => gameStatus(game) === "backlog").len
     ))}
   </div>
 
+  <div class="list-view terminal-panel" hidden>
+    <div class="terminal-titlebar">
+      <span>INDEX: TITLE_SCAN</span>
+      <span class="terminal-meta">{allGames.length} RECORDS</span>
+    </div>
+    <div class="list-table">
+      <div class="list-row list-head">
+        <span>TITLE</span>
+        <span>PLATFORM</span>
+        <span>STATUS</span>
+        <span>SCORE</span>
+      </div>
+      {allGames.map(g => {
+        const status = gameStatus(g);
+        return (
+          <div class="list-row" data-list-row data-status={status} data-title={g.title}>
+            <span class="list-title">
+              <span class="bullet">&gt;</span>
+              {g.title}
+            </span>
+            <span class="list-platform">{g.platform}</span>
+            <span>
+              <span class:list={["status-badge", status]}>{statusLabels[status]}</span>
+            </span>
+            <span>
+              {g.score !== undefined ? (
+                <span
+                  class:list={["score-badge", { "hall-of-fame": g.rank === 0 }]}
+                  style={`color: ${scoreColor(g.score)}; border-color: ${scoreColor(g.score)}66;`}
+                >
+                  {g.rank === 0 && <span class="score-star">★</span>}
+                  {g.score}<span class="score-max">/10</span>
+                </span>
+              ) : (
+                <span class="score-empty">--</span>
+              )}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+
   {library.some(g => g.games.length === 0) && (
-    <div class="tbd-grid">
+    <div class="tbd-grid" data-files-extra>
       {library.filter(g => g.games.length === 0).map(group => (
         <div class="platform-box empty terminal-panel">
           <div class="terminal-titlebar">
@@ -121,6 +171,14 @@ const backlogTotal = allGames.filter(game => gameStatus(game) === "backlog").len
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
+  }
+
+  .platform-grid[hidden],
+  .list-view[hidden],
+  .list-row[hidden],
+  [data-files-extra][hidden],
+  [data-platform-box][hidden] {
+    display: none;
   }
 
   .db-header {
@@ -163,6 +221,22 @@ const backlogTotal = allGames.filter(game => gameStatus(game) === "backlog").len
   .status-guide div {
     padding: var(--space-2) var(--space-3);
     border-left: 1px solid var(--color-border);
+    cursor: pointer;
+  }
+
+  .status-guide div:has(.status-filter[data-active="true"]) {
+    background: rgba(0, 255, 102, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(0, 255, 102, 0.22);
+  }
+
+  .status-guide div:has(.status-filter.backlog[data-active="true"]) {
+    background: rgba(150, 160, 150, 0.1);
+    box-shadow: inset 0 0 0 1px rgba(150, 160, 150, 0.24);
+  }
+
+  .status-guide div:has(.status-filter.cleared[data-active="true"]) {
+    background: rgba(31, 127, 76, 0.14);
+    box-shadow: inset 0 0 0 1px rgba(31, 127, 76, 0.28);
   }
 
   .status-guide div:first-child {
@@ -173,6 +247,30 @@ const backlogTotal = allGames.filter(game => gameStatus(game) === "backlog").len
     font-family: var(--font-pixel);
     font-size: 0.45rem;
     letter-spacing: 0.08em;
+  }
+
+  .status-filter {
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    letter-spacing: inherit;
+    cursor: pointer;
+  }
+
+  .status-filter:hover,
+  .status-filter[data-active="true"] {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .status-filter[data-active="true"]::before {
+    content: "[";
+  }
+
+  .status-filter[data-active="true"]::after {
+    content: "]";
   }
 
   .status-guide dd {
@@ -263,6 +361,65 @@ const backlogTotal = allGames.filter(game => gameStatus(game) === "backlog").len
     margin-bottom: var(--space-1);
     color: var(--color-text);
     break-inside: avoid;
+  }
+
+  .list-view {
+    padding: 0;
+  }
+
+  .list-table {
+    padding: var(--space-3);
+    font-size: var(--font-sm);
+  }
+
+  .list-row {
+    display: grid;
+    grid-template-columns: minmax(180px, 1.4fr) minmax(100px, 0.8fr) minmax(78px, auto) minmax(56px, auto);
+    gap: var(--space-3);
+    align-items: center;
+    padding: 3px 0;
+    border-bottom: 1px dashed rgba(0, 255, 102, 0.12);
+  }
+
+  .list-row:last-child {
+    border-bottom: 0;
+  }
+
+  .list-head {
+    font-family: var(--font-pixel);
+    font-size: 0.38rem;
+    color: var(--color-muted);
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--space-1);
+  }
+
+  .list-title,
+  .list-platform {
+    min-width: 0;
+  }
+
+  .score-empty {
+    color: var(--color-muted);
+    font-family: var(--font-pixel);
+    font-size: 0.4rem;
+  }
+
+  @media (max-width: 700px) {
+    .list-row {
+      grid-template-columns: 1fr;
+      gap: 2px;
+      padding: var(--space-2) 0;
+    }
+
+    .list-head {
+      display: none;
+    }
+
+    .list-platform {
+      color: var(--color-muted);
+      font-size: var(--font-xs);
+    }
   }
 
   .bullet {
@@ -375,37 +532,76 @@ const backlogTotal = allGames.filter(game => gameStatus(game) === "backlog").len
 </style>
 
 <script>
-  type SortOrder = "default" | "asc" | "desc";
+  type ViewMode = "files" | "asc" | "desc";
+  type StatusFilter = "active" | "backlog" | "cleared";
 
-  // 各ulのli要素を元の順序で記憶
-  const lists = document.querySelectorAll<HTMLUListElement>(".platform-box ul");
-  const originals = new Map<HTMLUListElement, HTMLLIElement[]>();
-  lists.forEach(ul => {
-    originals.set(ul, [...ul.querySelectorAll<HTMLLIElement>("li")]);
-  });
+  const platformGrid = document.querySelector<HTMLElement>(".platform-grid");
+  const listView = document.querySelector<HTMLElement>(".list-view");
+  const listTable = document.querySelector<HTMLElement>(".list-table");
+  const listRows = [...document.querySelectorAll<HTMLElement>("[data-list-row]")];
+  let activeView: ViewMode = "files";
+  let activeFilter: StatusFilter | null = null;
 
-  function applySort(order: SortOrder) {
-    lists.forEach(ul => {
-      const items = order === "default"
-        ? [...(originals.get(ul) ?? [])]
-        : [...ul.querySelectorAll<HTMLLIElement>("li")].sort((a, b) => {
-            const ta = a.textContent?.trim() ?? "";
-            const tb = b.textContent?.trim() ?? "";
-            return order === "asc"
-              ? ta.localeCompare(tb, "ja")
-              : tb.localeCompare(ta, "ja");
-          });
-      items.forEach(li => ul.appendChild(li));
+  function applyFilter() {
+    document.querySelectorAll<HTMLButtonElement>(".status-filter").forEach(btn => {
+      btn.dataset.active = btn.dataset.statusFilter === activeFilter ? "true" : "false";
+    });
+
+    document.querySelectorAll<HTMLElement>("[data-platform-box]").forEach(box => {
+      const items = [...box.querySelectorAll<HTMLLIElement>("li[data-status]")];
+      items.forEach(li => {
+        const visible = activeFilter === null || li.dataset.status === activeFilter;
+        li.hidden = !visible;
+      });
+      box.hidden = items.length > 0 && items.every(li => li.hidden);
+    });
+
+    listRows.forEach(row => {
+      const visible = activeFilter === null || row.dataset.status === activeFilter;
+      row.hidden = !visible;
     });
   }
 
-  applySort("asc");
+  function applyView(mode: ViewMode) {
+    activeView = mode;
+
+    document.querySelectorAll<HTMLButtonElement>(".sort-btn").forEach(btn => {
+      btn.dataset.active = btn.dataset.viewMode === activeView ? "true" : "false";
+    });
+
+    if (platformGrid) platformGrid.hidden = activeView !== "files";
+    document.querySelectorAll<HTMLElement>("[data-files-extra]").forEach(el => {
+      el.hidden = activeView !== "files";
+    });
+    if (listView) listView.hidden = activeView === "files";
+
+    if (activeView !== "files" && listTable) {
+      const sortedRows = [...listRows].sort((a, b) => {
+        const ta = a.dataset.title ?? "";
+        const tb = b.dataset.title ?? "";
+        return activeView === "asc"
+          ? ta.localeCompare(tb, "ja")
+          : tb.localeCompare(ta, "ja");
+      });
+      sortedRows.forEach(row => listTable.appendChild(row));
+    }
+
+    applyFilter();
+  }
+
+  applyView("files");
 
   document.querySelectorAll<HTMLButtonElement>(".sort-btn").forEach(btn => {
     btn.addEventListener("click", () => {
-      document.querySelectorAll(".sort-btn").forEach(b => b.removeAttribute("data-active"));
-      btn.dataset.active = "true";
-      applySort(btn.dataset.sort as SortOrder);
+      applyView(btn.dataset.viewMode as ViewMode);
+    });
+  });
+
+  document.querySelectorAll<HTMLElement>("[data-status-filter-cell]").forEach(cell => {
+    cell.addEventListener("click", () => {
+      const nextFilter = cell.dataset.statusFilterCell as StatusFilter;
+      activeFilter = activeFilter === nextFilter ? null : nextFilter;
+      applyFilter();
     });
   });
 </script>
