@@ -67,6 +67,14 @@ const totalGames = allGames.length;
     </a>
   </nav>
 
+  <section class="toybox-section">
+    <h2 class="section-title">[ TOYBOX ]</h2>
+    <a href="/rf4-seed-level/" class="nav-card terminal-panel">
+      <span class="label">[ RF4 SEED LEVEL ]</span>
+      <span class="desc">ルーンファクトリー4<br />種レベル管理ツール</span>
+    </a>
+  </section>
+
   <hr />
 
   <section id="contact">
@@ -212,6 +220,14 @@ if (el) {
   .nav-card .desc {
     font-size: var(--font-sm);
     color: var(--color-muted);
+  }
+
+  .toybox-section {
+    margin-bottom: var(--space-5);
+  }
+
+  .toybox-section .nav-card {
+    max-width: 320px;
   }
 
   .status-panel {
