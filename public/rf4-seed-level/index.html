@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RF4 種Lvメモ</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="title-row">
+        <button class="title-mark" id="menu-button" type="button" aria-label="メニューを開く" aria-expanded="false" aria-controls="app-menu">
+          <img src="assets/turnip.png" alt="">
+        </button>
+        <p class="eyebrow">Rune Factory 4</p>
+        <h1>種Lvメモ</h1>
+      </div>
+      <nav class="app-menu" id="app-menu" aria-label="アプリメニュー" hidden>
+        <button class="menu-item" id="export-button" type="button">エクスポート</button>
+      </nav>
+      <div class="tool-icons" aria-hidden="true">
+        <img src="assets/hoe.png" alt="">
+        <img src="assets/watering-can.png" alt="">
+        <img src="assets/axe.png" alt="">
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <section class="toolbar" aria-label="表示フィルタ">
+        <button class="filter-button is-active" type="button" data-filter="all">すべて</button>
+        <button class="filter-button" type="button" data-filter="unknown">未確認</button>
+        <button class="filter-button" type="button" data-filter="not-max">Lv10未満</button>
+        <button class="filter-button" type="button" data-filter="crop">作物</button>
+        <button class="filter-button" type="button" data-filter="flower">花</button>
+        <button class="filter-button season-filter" type="button" data-filter="season:spring">春</button>
+        <button class="filter-button season-filter" type="button" data-filter="season:summer">夏</button>
+        <button class="filter-button season-filter" type="button" data-filter="season:autumn">秋</button>
+        <button class="filter-button season-filter" type="button" data-filter="season:winter">冬</button>
+      </section>
+
+      <section class="crop-list" id="crop-list" aria-label="作物と花の種Lv一覧"></section>
+
+      <p class="empty-message" id="empty-message" hidden>表示できる項目がありません。</p>
+    </main>
+
+    <footer class="app-footer">
+      <a href="https://kowori.net/" rel="home">kowori.net</a>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
