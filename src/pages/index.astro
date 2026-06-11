@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Alert from "../components/Alert.astro";
+import { getCollection } from "astro:content";
 import { allGames, gameStatus, statusLabels } from "../data/library";
 
 const twitter = { text: "Twitter", url: "https://twitter.com/kowori_fallout", handle: "@kowori_fallout", color: "#1d9bf0", icon: "𝕏" };
@@ -10,6 +11,14 @@ const youtube  = { text: "YouTube", url: "https://www.youtube.com/channel/UC2-6v
 const activeGames = allGames.filter(game => gameStatus(game) === "active");
 const backlogTotal = allGames.filter(game => gameStatus(game) === "backlog").length;
 const totalGames = allGames.length;
+const latestPost = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.published.valueOf() - a.data.published.valueOf())[0];
+const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat("ja-JP", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
 ---
 
 <Layout title="top">
@@ -25,6 +34,16 @@ const totalGames = allGames.length;
   <hr />
 
   <Alert />
+
+  {latestPost && (
+    <a href={`/blog/${latestPost.slug}/`} class="latest-post terminal-panel">
+      <span class="latest-label">LATEST BLOG ENTRY</span>
+      <span class="latest-title">{latestPost.data.title}</span>
+      <time datetime={latestPost.data.published.toISOString()}>
+        {formatDate(latestPost.data.published)}
+      </time>
+    </a>
+  )}
 
   <section class="status-panel">
     <div class="terminal-panel status-box">
@@ -188,6 +207,42 @@ if (el) {
     font-style: italic;
   }
 
+  .latest-post {
+    align-items: center;
+    display: grid;
+    gap: var(--space-2) var(--space-3);
+    grid-template-columns: 1fr auto;
+    margin-bottom: var(--space-5);
+    padding: var(--space-3) var(--space-4);
+    text-decoration: none;
+  }
+
+  .latest-post:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--panel-shadow), var(--pixel-shadow);
+    text-decoration: none;
+  }
+
+  .latest-label {
+    color: var(--color-accent);
+    font-family: var(--font-pixel);
+    font-size: 0.45rem;
+    grid-column: 1 / -1;
+    letter-spacing: 0.08em;
+  }
+
+  .latest-title {
+    color: var(--color-primary);
+    font-size: var(--font-md);
+    font-weight: 700;
+  }
+
+  .latest-post time {
+    color: var(--color-muted);
+    font-family: var(--font-pixel);
+    font-size: 0.42rem;
+  }
+
   .page-nav {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -324,6 +379,10 @@ if (el) {
   }
 
   @media (max-width: 600px) {
+    .latest-post {
+      grid-template-columns: 1fr;
+    }
+
     .status-panel {
       grid-template-columns: 1fr;
     }

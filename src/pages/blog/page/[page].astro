@@ -1,0 +1,29 @@
+---
+import { getCollection } from "astro:content";
+import BlogIndex from "../../../components/BlogIndex.astro";
+
+export async function getStaticPaths() {
+  const pageSize = 5;
+  const posts = (await getCollection("blog", ({ data }) => !data.draft))
+    .sort((a, b) => b.data.published.valueOf() - a.data.published.valueOf());
+  const totalPages = Math.ceil(posts.length / pageSize);
+
+  return Array.from({ length: Math.max(totalPages - 1, 0) }, (_, index) => {
+    const currentPage = index + 2;
+    const start = (currentPage - 1) * pageSize;
+
+    return {
+      params: { page: String(currentPage) },
+      props: {
+        posts: posts.slice(start, start + pageSize),
+        currentPage,
+        totalPages,
+      },
+    };
+  });
+}
+
+const { posts, currentPage, totalPages } = Astro.props;
+---
+
+<BlogIndex posts={posts} currentPage={currentPage} totalPages={totalPages} />

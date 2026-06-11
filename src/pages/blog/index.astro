@@ -1,0 +1,12 @@
+---
+import { getCollection } from "astro:content";
+import BlogIndex from "../../components/BlogIndex.astro";
+
+const pageSize = 5;
+const allPosts = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.published.valueOf() - a.data.published.valueOf());
+const posts = allPosts.slice(0, pageSize);
+const totalPages = Math.ceil(allPosts.length / pageSize);
+---
+
+<BlogIndex posts={posts} currentPage={1} totalPages={totalPages} />

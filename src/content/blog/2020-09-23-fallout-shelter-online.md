@@ -1,0 +1,8 @@
+---
+title: "Fallout Shelter Online っていまどうよ？"
+description: "Fallout Shelter Online ってなあに？ 　Fallout Shelter Online(FSO) は Bethesda 社 Fallout シリーズのスピンアウトもので過去作 Fa…"
+published: 2020-09-23
+tags: ["smartphone","Fallout Shelter Online","games"]
+---
+
+<img src="https://blogger.googleusercontent.com/img/a/AVvXsEhYDxVAYMQwsdt2ets4C_ZnNQAVfr10D5MpE59fCHfdL2QyAUnrZLmX15Y98qCfO2CEojo8hXlzk1su464UART6XAV8cBWt9lGhchAhuF87zNfwSeYEUWjPjOFXJT7zgfP_Imq2BY_j47bE_LeoU6W4D-FNoNGXkc_9d6HZQ8BR2PW51PdZt5veLza2=w400-h185" alt="" loading="lazy"><br /><h2>Fallout Shelter Online ってなあに？</h2><p>　Fallout Shelter Online(FSO) は Bethesda 社 Fallout シリーズのスピンアウトもので過去作 Fallout Shelter のコンセプトを少し変えてオンライン要素を放り込んだソシャゲです。</p><p>公式のトレーラをみるだけで、いつも通りこんな感じのFalloutのノリで進むんだ。と言いたいところですが、今回はそれほどブラックジョーク成分は含まれていないです。</p><p>https://www.youtube.com/embed/SwmOAAqdm04</p><p>全年齢狙いっぽいし仕方ないね。攻略サイトもいくつかあるのでソシャゲの雰囲気はつかめると思います。</p><h3>Fallout Shelter ってなあに</h3><p>　PCやPS4、スマホやSwitchでリリースされている Vault という核シェルターを運営していくゲームです。戦闘メインの FSO とはコンセプトが少し異なりますので、画面やシステムが似通っているものの FSO との繋がりはありません。こちらも無料なので気楽に遊べますが、FSO と違って住人はガンガン死亡します。</p><p>&nbsp; &nbsp;https://bethesda.net/ja/game/falloutshelter</p><p>　https://www.youtube.com/embed/KaHdKlSsg54</p><p>そういえば PC 版は結構ガバガバでチョイチョイなにかすると色々自由に…おや、こんな時間に誰だ？出前？ん、注文した覚えはn…</p><h2>今の FSO ってどんな感じ？</h2><p>　個人の体感でしかないけど人数が落ち込んできて、特に中堅クラスのギルドの元気が無くなってきているような感覚を持っています。かくいう私が参加しているギルドもギルマスがログインしなくなって権限が別プレイヤーに移る事態になったことがあります。居住者評価のコメントも以前より活気がなくなってきました。</p><h2>これから参戦して大丈夫そう？</h2><p>　正直微妙です。ファンならやってても良いと思うけど課金してまでプレイするのは</p><p>お金持ち以外はおすすめできないです。このゲームの運営は何度か失敗をやらかしているし、恐らくはこれからも失敗をやらかすだろうから詫びコーラ狙いで十分楽しめるような気がしています。それに費やす時間があるなら正直ナンバリングタイトルをやってた方がよい。というご意見は大正解。それでもなおプレイしたい人という人向けにつらつらと書き続けていきます。</p>
