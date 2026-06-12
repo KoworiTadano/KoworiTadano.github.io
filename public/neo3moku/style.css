@@ -177,6 +177,19 @@ h1 {
   background: #fffdf7;
 }
 
+.site-footer {
+  margin-top: 28px;
+  font-size: 0.85rem;
+}
+
+.site-footer a {
+  color: #5e6a66;
+}
+
+.site-footer a:hover {
+  color: #ba4b2f;
+}
+
 @media (max-width: 420px) {
   body {
     padding: 16px;
