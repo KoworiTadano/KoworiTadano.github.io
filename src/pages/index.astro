@@ -92,6 +92,10 @@ const formatDate = (date: Date) =>
       <span class="label">[ RF4 SEED LEVEL ]</span>
       <span class="desc">ルーンファクトリー4<br />種レベル管理ツール</span>
     </a>
+    <a href="/neo3moku/" class="nav-card terminal-panel">
+      <span class="label">[ NEO 3MOKU ]</span>
+      <span class="desc">うごく3目並べ</span>
+    </a>
   </section>
 
   <hr />
@@ -278,10 +282,18 @@ if (el) {
   }
 
   .toybox-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
     margin-bottom: var(--space-5);
   }
 
+  .toybox-section .section-title {
+    flex-basis: 100%;
+  }
+
   .toybox-section .nav-card {
+    flex: 1 1 240px;
     max-width: 320px;
   }
 
