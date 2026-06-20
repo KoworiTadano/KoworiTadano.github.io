@@ -286,7 +286,7 @@ export const games: Game[] = [
   { title: "DQ9", editions: [{ platform: "DS / 3DS", status: "cleared" }] },
   { title: "METALMAX2:ReLOADED", editions: [{ platform: "DS / 3DS", status: "cleared" }] },
   { title: "METALMAX3", editions: [{ platform: "DS / 3DS", status: "cleared" }] },
-  { title: "METALMAX4", editions: [{ platform: "DS / 3DS", status: "backlog" }] },
+  { title: "METALMAX4", editions: [{ platform: "DS / 3DS", status: "active" }] },
   { title: "サガ2 秘宝伝説", editions: [{ platform: "DS / 3DS", status: "backlog" }] },
   { title: "スターフォックス64", editions: [{ platform: "N64", status: "backlog" }] },
   { title: "ピクミン", editions: [{ platform: "GC", status: "backlog" }] },
