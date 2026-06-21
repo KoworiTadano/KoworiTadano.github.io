@@ -155,6 +155,17 @@ const backlogTotal = allGames.filter(game => gameStatus(game) === "backlog").len
       </ul>
     </div>
   </div>
+
+  <section class="library-rules terminal-panel" aria-labelledby="library-rules-title">
+    <div class="terminal-titlebar">
+      <h2 id="library-rules-title">LIBRARY RULES</h2>
+    </div>
+    <ul>
+      <li>現在手元にあるゲームのみ記載する。廃棄・売却済みのゲームやゲーム機は記載しない。</li>
+      <li>買い戻したゲームは、買い戻す前にクリアしていればCLEARとして扱う。</li>
+      <li>古すぎて記憶が曖昧なゲームは、暫定的にVAULTとして扱う。</li>
+    </ul>
+  </section>
 </Layout>
 
 <style>
@@ -329,6 +340,26 @@ const backlogTotal = allGames.filter(game => gameStatus(game) === "backlog").len
   .lostfound-box {
     border-style: dashed;
     opacity: 0.6;
+  }
+
+  .library-rules {
+    margin-top: var(--space-5);
+    padding: 0;
+  }
+
+  .library-rules h2 {
+    margin: 0;
+    font: inherit;
+  }
+
+  .library-rules ul {
+    margin: 0;
+    padding: var(--space-3) var(--space-3) var(--space-3) calc(var(--space-3) + 1.2rem);
+    font-size: var(--font-sm);
+  }
+
+  .library-rules li + li {
+    margin-top: var(--space-2);
   }
 
   .platform-box.empty {
