@@ -65,7 +65,7 @@ export const games: Game[] = [
   { title: "DQ10", editions: [{ platform: "PS4 / PS5", status: "backlog" }] },
   { title: "PALWORLD", editions: [{ platform: "PS4 / PS5", status: "backlog" }] },
   { title: "DQ11", editions: [{ platform: "PS4 / PS5", status: "cleared" }] },
-  { title: "Rune Factory 4 Special", editions: [{ platform: "PS4 / PS5", status: "active" }] },
+  { title: "Rune Factory 4 Special", editions: [{ platform: "PS4 / PS5", status: "cleared" }] },
   { title: "Persona 5 the Royal", editions: [{ platform: "PS4 / PS5", status: "cleared" }] },
   { title: "OUTER WORLDS", editions: [{ platform: "PS4 / PS5", status: "backlog", score: 8 },{ platform: "Windows", status: "cleared", score: 8 }] },
   { title: "モナーク", editions: [{ platform: "PS4 / PS5", status: "cleared", score: 7 }] },
