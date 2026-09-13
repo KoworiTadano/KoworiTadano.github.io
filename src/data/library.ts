@@ -54,8 +54,10 @@ export const platforms = [
 ];
 
 export const games: Game[] = [
+  { title: "ディスガイア6", editions: [{ platform: "PS4 / PS5", status: "active" }] },
+  { title: "デジモンストーリー サイバースルゥース ハッカーズメモリー", editions: [{ platform: "PS4 / PS5", status: "backlog" }] },
   { title: "デモンゲイズ", editions: [{ platform: "PS4 / PS5", status: "cleared", score: 7 }] },
-  { title: "デモンゲイズ2", editions: [{ platform: "PS4 / PS5", status: "active" }] },
+  { title: "デモンゲイズ2", editions: [{ platform: "PS4 / PS5", status: "cleared" }] },
   { title: "PSO2NGS", editions: [{ platform: "PS4 / PS5", status: "backlog" }] },
   { title: "ソードアート・オンライン ロストソング", editions: [{ platform: "PS4 / PS5", status: "backlog" }] },
   { title: "スカイリム", editions: [{ platform: "PS4 / PS5", status: "cleared" }] },
