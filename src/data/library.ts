@@ -54,8 +54,8 @@ export const platforms = [
 ];
 
 export const games: Game[] = [
-  { title: "ディスガイア6", editions: [{ platform: "PS4 / PS5", status: "active" }] },
-  { title: "デジモンストーリー サイバースルゥース ハッカーズメモリー", editions: [{ platform: "PS4 / PS5", status: "backlog" }] },
+  { title: "ディスガイア6", editions: [{ platform: "PS4 / PS5", status: "cleared" }] },
+  { title: "デジモンストーリー サイバースルゥース ハッカーズメモリー", editions: [{ platform: "PS4 / PS5", status: "active" }] },
   { title: "デモンゲイズ", editions: [{ platform: "PS4 / PS5", status: "cleared", score: 7 }] },
   { title: "デモンゲイズ2", editions: [{ platform: "PS4 / PS5", status: "cleared" }] },
   { title: "PSO2NGS", editions: [{ platform: "PS4 / PS5", status: "backlog" }] },
@@ -196,7 +196,12 @@ export const games: Game[] = [
   },
   { title: "スーパーマリオブラザーズ3", editions: [{ platform: "FC", status: "backlog" }] },
   { title: "スターソルジャー", editions: [{ platform: "FC", status: "backlog" }] },
-  { title: "DQ4", editions: [{ platform: "FC", status: "backlog" }] },
+  { title: "DQ4", 
+    editions: [
+      { platform: "FC", status: "cleared" },
+      { platform: "DS / 3DS", status: "cleared" }
+    ] 
+  },
   { title: "ワルキューレの冒険", editions: [{ platform: "FC", status: "backlog" }] },
   { title: "バイナリィランド", editions: [{ platform: "FC", status: "backlog" }] },
   {
