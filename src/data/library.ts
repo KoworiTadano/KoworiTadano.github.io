@@ -119,8 +119,8 @@ export const games: Game[] = [
   {
     title: "真・女神転生 if...",
     editions: [
-      { platform: "PS3 / GameArchives", status: "cleared" },
-      { platform: "SFC", status: "cleared" },
+      { platform: "PS3 / GameArchives", status: "cleared",score: 10,rank: 0 },
+      { platform: "SFC", status: "cleared",score: 10, rank: 0 },
     ],
   },
   { title: "ワイルドアームズ2nd イグニッション", editions: [{ platform: "PS3 / GameArchives", status: "backlog" }] },
@@ -207,7 +207,7 @@ export const games: Game[] = [
   {
     title: "DQ3",
     editions: [
-      { platform: "FC", status: "cleared" },
+      { platform: "FC", status: "cleared",score:10 },
       { platform: "GB / GBA", status: "cleared" },
     ],
   },
@@ -237,7 +237,7 @@ export const games: Game[] = [
   { title: "ゼルダの伝説 神々のトライフォース", editions: [{ platform: "SFC", status: "backlog" }] },
   { title: "魔神転生", editions: [{ platform: "SFC", status: "cleared" }] },
   { title: "ジョジョの奇妙な冒険", editions: [{ platform: "SFC", status: "backlog" }] },
-  { title: "真・女神転生II", editions: [{ platform: "SFC", status: "cleared" }] },
+  { title: "真・女神転生II", editions: [{ platform: "SFC", status: "cleared",score: 10 }] },
   { title: "スーパーロボット大戦EX", editions: [{ platform: "SFC", status: "backlog" }] },
   { title: "ロマンシング サ・ガ 3", editions: [{ platform: "SFC", status: "backlog" }] },
   {
@@ -247,7 +247,7 @@ export const games: Game[] = [
       { platform: "DS / 3DS", status: "cleared" },
     ],
   },
-  { title: "魔神転生II", editions: [{ platform: "SFC", status: "cleared" }] },
+  { title: "魔神転生II", editions: [{ platform: "SFC", status: "cleared",score: 8 }] },
   { title: "LastBibleIII", editions: [{ platform: "SFC", status: "cleared" }] },
   { title: "旧約・女神転生", editions: [{ platform: "SFC", status: "cleared" }] },
   { title: "F-ZERO", editions: [{ platform: "SFC", status: "backlog" }] },
@@ -307,6 +307,7 @@ export const games: Game[] = [
       { platform: "PC-9801/9821", status: "cleared" },
     ],
   },
+  { title: "FF11", editions: [{ platform: "Windows", status: "backlog" }] },
   { title: "女神転生IMAGINE", editions: [{ platform: "Windows", status: "backlog" }] },
   { title: "銀河英雄伝説IV EX", editions: [{ platform: "Windows", status: "backlog" }] },
   { title: "Diablo II", editions: [{ platform: "Windows", status: "cleared" }] },
